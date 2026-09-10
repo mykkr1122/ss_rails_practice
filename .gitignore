@@ -1,0 +1,43 @@
+# Bundler
+/.bundle
+/vendor/bundle
+
+# ログ・一時ファイル
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# 開発中のアップロード
+/storage/*
+!/storage/.keep
+
+# プリコンパイル済みアセット
+/public/assets
+/public/packs
+/public/packs-test
+
+# Node / Yarn（後で使う場合）
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity
+
+# Rails の秘密情報（リポジトリに載せない）
+/config/master.key
+/config/database.yml
+.env
+.env.*
+!.env.example
+
+# デバッグ・レポート
+.byebug_history
+/coverage
+brakeman_report.txt
+
+# OS / エディタ
+.DS_Store
+*.swp
+*~
+.idea/
+.vscode/

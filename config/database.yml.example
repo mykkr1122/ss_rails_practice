@@ -1,0 +1,29 @@
+# このファイルをコピーして database.yml を作る
+#   cp config/database.yml.example config/database.yml
+#
+# 接続情報は .env（またはシェルの環境変数）で切り替える。
+# 本番の接続情報は書かない。
+
+default: &default
+  adapter: mysql2
+  encoding: utf8mb4
+  collation: utf8mb4_general_ci
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: <%= ENV.fetch("MYSQL_USERNAME", "root") %>
+  password: <%= ENV.fetch("MYSQL_PASSWORD", "") %>
+  host: <%= ENV.fetch("MYSQL_HOST", "127.0.0.1") %>
+  port: <%= ENV.fetch("MYSQL_PORT", "3306") %>
+
+development:
+  <<: *default
+  database: ss_rails_practice_development
+
+test:
+  <<: *default
+  database: ss_rails_practice_test
+
+production:
+  <<: *default
+  database: ss_rails_practice_production
+  username: ss_rails_practice
+  password: <%= ENV['SS_RAILS_PRACTICE_DATABASE_PASSWORD'] %>
