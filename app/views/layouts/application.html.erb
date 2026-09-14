@@ -10,6 +10,19 @@
   </head>
 
   <body>
-    <%= yield %>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <%= link_to 'HOME', root_path, class: 'site-logo' %>
+        <nav class="site-nav">
+          <%= link_to '商品一覧', products_path %>
+          <%= link_to '商品を登録', new_product_path %>
+          <span class="site-nav__muted">カート</span>
+        </nav>
+      </div>
+    </header>
+
+    <main class="site-main">
+      <%= yield %>
+    </main>
   </body>
 </html>
