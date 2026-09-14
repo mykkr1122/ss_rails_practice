@@ -1,0 +1,13 @@
+<article class="product-detail">
+  <h1><%= @product.name %></h1>
+  <p>店舗: <%= @product.store&.label_for_select %></p>
+  <p><%= simple_format(@product.description) %></p>
+  <p >販売価格:<%= @product.price %>円</p>
+    <p>在庫: <%= @product.stock %></p>
+    <p>状態: <%= @product.status_label %></p>
+  <p>
+    <%= link_to '編集', edit_admin_product_path(@product) %>
+    <%= button_to '削除', admin_product_path(@product), method: :delete, data: { confirm: '削除しますか？' } %>
+    <%= link_to '一覧へ', admin_products_path %>
+  </p>
+</article>

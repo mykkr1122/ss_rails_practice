@@ -8,16 +8,13 @@
 </section>
 
 <% if @products.blank? %>
-  <p>商品がありません。<%= link_to '新規登録', new_product_path %>から追加してください。</p>
+  <p>商品がありません。</p>
 <% else %>
   <ul class="product-list">
     <% @products.each do |product| %>
       <li class="product-card">
         <%= link_to product.name, product_path(product), class: 'product-card__name' %>
         <p class="product-card__price"><%= product.price %>円</p>
-        <p>
-          <%= link_to '詳細', product_path(product) %>
-        </p>
       </li>
     <% end %>
   </ul>

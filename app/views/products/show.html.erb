@@ -1,10 +1,9 @@
 <article class="product-detail">
   <h1><%= @product.name %></h1>
+  <p><%= simple_format(@product.description) %></p>
   <p class="product-card__price"><%= @product.price %>円</p>
 
   <p>
-    <%= link_to '編集', edit_product_path(@product) %>
-    <%= button_to '削除', product_path(@product), method: :delete, data: { confirm: '削除しますか？' } %>
     <%= link_to '一覧へ', products_path %>
   </p>
 </article>
