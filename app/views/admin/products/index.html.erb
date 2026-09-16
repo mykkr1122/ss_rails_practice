@@ -1,0 +1,23 @@
+<h1>商品管理</h1>
+<p><%= link_to '商品を登録', new_admin_product_path %></p>
+
+<%= form_with url: admin_products_path, method: :get, local: true, class: 'search-form' do %>
+  <%= text_field_tag :q, params[:q], placeholder: '商品名で検索' %>
+  <%= submit_tag '検索' %>
+<% end %>
+
+<% if @products.blank? %>
+  <p>商品がありません。</p>
+<% else %>
+  <ul class="product-list">
+    <% @products.each do |product| %>
+      <li class="product-card">
+        <%= link_to product.name, admin_product_path(product), class: 'product-card__name' %>
+        <p class="product-card__price"><%= product.price %>円</p>
+        <p>
+          <%= link_to '編集', edit_admin_product_path(product) %>
+        </p>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
