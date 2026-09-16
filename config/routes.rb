@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   root "products#index"
   resources :products, only: [:index, :show]
 
+  resource :cart, only: [:show]
+  resources :cart_items, only: [:create, :update, :destroy]
+
   namespace :admin do
     resources :products
   end
