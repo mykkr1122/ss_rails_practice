@@ -43,6 +43,25 @@ database.yml.example のパスワードデフォルトを Docker に揃える
 - [ ] （自分で確認した画面操作・コマンド）
 ```
 
+## 学習の順
+
+最終的に `app/views` の ERB は Haml に揃える。最初から全部書き換えない。
+
+1. 店頭 / 管理 / 店舗（ERB のまま）
+2. **Haml 入門**（`haml-rails` を入れ、単純な画面を 1 枚だけ `.html.haml` にする。インデントをここで覚える）
+3. カート以降の **新規ビューは Haml**
+4. 残りの ERB を、機能追加と混ぜずに Haml へ差し替える
+
+エージェントは Haml を出すとき 2 スペースインデントに揃える。タブとスペースを混ぜない。人は生成結果の入れ子を読んでから次へ進む。
+
+## コードレビュー
+
+指摘・セルフレビューは次の観点に合わせる。
+
+https://github.com/yutaroharadacl/ss_rails_practice/blob/ac93de14644b3f2a3e3ad1cbbfab2979122b14a3/docs/rails_review_checklist.md
+
+特に: flash は I18n、`find` の `RecordNotFound` をユーザー向けに扱う、リダイレクト先は明示、成功・失敗の両方で画面にメッセージを出す。新規の `create_table` は `up` / `down` と `data_source_exists?`。
+
 ## 質問の受け方
 
 ファイルを `@` で付ける。エラーは全文。期待する画面操作は日本語で書く。
