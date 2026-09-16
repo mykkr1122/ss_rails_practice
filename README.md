@@ -8,6 +8,8 @@
 | Rails | 6.0.6.1 |
 | アプリサーバ | Puma 4.3 |
 | DB | MySQL 5.7（Docker のみ。文字コード `utf8mb4`） |
+| テンプレート | 既存画面は ERB。カート以降の新規ビューは Haml（`haml-rails` / Haml 6） ※後工程で修正予定|
+| JavaScript | Sprockets + `rails-ujs` + Turbolinks |
 
 `concurrent-ruby` は `1.3.4` に固定している。1.3.5 以降は Rails 6.0 で `Logger` 関連のエラーになる。
 

@@ -16,12 +16,18 @@
         <nav class="site-nav">
           <%= link_to '商品一覧', products_path %>
           <%= link_to '管理', admin_products_path %>
-          <span class="site-nav__muted">カート</span>
+          <%= link_to "カート(#{current_cart.cart_items.sum(:quantity)})", cart_path %>
         </nav>
       </div>
     </header>
 
     <main class="site-main">
+      <% if notice %>
+        <p class="flash-notice"><%= notice %></p>
+      <% end %>
+      <% if alert %>
+        <p class="flash-alert"><%= alert %></p>
+      <% end %>
       <%= yield %>
     </main>
   </body>

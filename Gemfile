@@ -7,6 +7,9 @@ gem 'concurrent-ruby', '1.3.4'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 6.0.6', '>= 6.0.6.1'
+
+gem 'haml-rails', '~> 2.0'
+
 # Use mysql as the database for Active Record
 gem 'mysql2', '>= 0.4.4'
 # Use Puma as the app server
