@@ -15,7 +15,7 @@
   </p>
   <p>
     <%= form.label :store_id, '店舗' %><br>
-    <%= form.collection_select :store_id, Store.order(:store_number), :id, :store_number, include_blank: true %>
+    <%= form.collection_select :store_id, Store.order(:store_number), :id, :label_for_select, include_blank: true %>
   </p>
   <p>
     <%= form.label :description, '説明' %><br>

@@ -71,7 +71,7 @@ ja:
     errors:
       messages:
         blank: を入力してください
-        taken: は登録済みのコードです
+        taken: は既に存在します
         not_a_number: は数値で入力してください
         not_an_integer: は整数で入力してください
         greater_than_or_equal_to: は%{count}以上にしてください

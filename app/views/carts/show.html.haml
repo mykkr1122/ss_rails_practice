@@ -11,8 +11,11 @@
         %p= "SKU: #{item.sku.code}"
         %p= "#{item.sku.price}円 × #{item.quantity}"
         %p= "小計: #{item.sku.price * item.quantity}円"
-        = form_with model: item, url: cart_item_path(item), method: :patch, local: true do |f|
-          = f.number_field :quantity, min: 1, max: item.sku.stock.to_i
-          = f.submit '更新'
+        - if item.product&.published?
+          = form_with model: item, url: cart_item_path(item), method: :patch, local: true do |f|
+            = f.number_field :quantity, min: 1, max: item.sku.stock.to_i
+            = f.submit '更新'
+        - else
+          %p この商品は現在購入できません
         = button_to '削除', cart_item_path(item), method: :delete, data: { confirm: '削除しますか？' }
   %p= "合計: #{@cart_items.sum { |i| i.sku.price * i.quantity }}円"

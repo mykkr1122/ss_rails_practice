@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_09_17_024432) do
+ActiveRecord::Schema.define(version: 2026_09_17_053152) do
 
   create_table "cart_items", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "cart_id", null: false
@@ -29,10 +29,10 @@ ActiveRecord::Schema.define(version: 2026_09_17_024432) do
   end
 
   create_table "products", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "status"
+    t.integer "status", null: false
     t.text "description"
     t.bigint "store_id"
     t.index ["store_id"], name: "index_products_on_store_id"
@@ -40,9 +40,9 @@ ActiveRecord::Schema.define(version: 2026_09_17_024432) do
 
   create_table "skus", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "product_id", null: false
-    t.string "code"
-    t.integer "price"
-    t.integer "stock"
+    t.string "code", null: false
+    t.integer "price", null: false
+    t.integer "stock", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["code"], name: "index_skus_on_code", unique: true

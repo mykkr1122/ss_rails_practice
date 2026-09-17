@@ -20,9 +20,19 @@ class Cart < ApplicationRecord
       return item
     end
 
+    if quantity < 1
+      item.errors.add(:quantity, :greater_than, count: 0)
+      return item
+    end
+
     item.quantity = item.quantity.to_i + quantity
-    return item unless item.save
-    
+    begin
+      return item unless item.save
+    rescue ActiveRecord::RecordNotUnique
+      item.errors.add(:sku_id, :taken)
+      return item
+    end
+
     item
   end
 end
