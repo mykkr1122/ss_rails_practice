@@ -14,7 +14,7 @@
     <% @products.each do |product| %>
       <li class="product-card">
         <%= link_to product.name, product_path(product), class: 'product-card__name' %>
-        <p class="product-card__price"><%= product.price %>円</p>
+        <p class="product-card__price"><%= product.display_price %>円〜</p>
       </li>
     <% end %>
   </ul>

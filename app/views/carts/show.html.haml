@@ -8,10 +8,11 @@
     - @cart_items.each do |item|
       %li
         %p= item.product.name
-        %p= "#{item.product.price}円 × #{item.quantity}"
-        %p= "小計: #{item.product.price * item.quantity}円"
+        %p= "SKU: #{item.sku.code}"
+        %p= "#{item.sku.price}円 × #{item.quantity}"
+        %p= "小計: #{item.sku.price * item.quantity}円"
         = form_with model: item, url: cart_item_path(item), method: :patch, local: true do |f|
-          = f.number_field :quantity, min: 1
+          = f.number_field :quantity, min: 1, max: item.sku.stock.to_i
           = f.submit '更新'
         = button_to '削除', cart_item_path(item), method: :delete, data: { confirm: '削除しますか？' }
-  %p= "合計: #{@cart_items.sum { |i| i.product.price * i.quantity }}円"
+  %p= "合計: #{@cart_items.sum { |i| i.sku.price * i.quantity }}円"

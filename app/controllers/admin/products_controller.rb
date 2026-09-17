@@ -2,7 +2,7 @@ class Admin::ProductsController < ApplicationController
 
 rescue_from ActiveRecord::RecordNotFound, with: :redirect_product_not_found
     def index
-        @products = Product.all;
+        @products = Product.all.includes(:skus);
         if params[:q]
           @products = @products.where('name LIKE ?', "%#{params[:q]}%")
         end
@@ -14,10 +14,15 @@ rescue_from ActiveRecord::RecordNotFound, with: :redirect_product_not_found
 
     def new
         @product = Product.new;
+        @product.skus.build;
       end
     
       def edit
         @product = Product.find(params[:id]);
+        # 未保存の空SKUがない場合
+        unless @product.skus.any?(&:new_record?)
+        @product.skus.build;
+        end
       end
     
     def create
@@ -36,6 +41,9 @@ rescue_from ActiveRecord::RecordNotFound, with: :redirect_product_not_found
          redirect_to [:admin, @product], notice: t('flash.admin.products.update.notice')
         else
           flash.now[:alert] = t('flash.admin.products.update.alert')
+          unless @product.skus.any?(&:new_record?)
+            @product.skus.build;
+            end
           render :edit
         end
       end
@@ -45,7 +53,8 @@ rescue_from ActiveRecord::RecordNotFound, with: :redirect_product_not_found
         if product.destroy
           redirect_to admin_products_path, notice: t('flash.admin.products.destroy.notice')
         else
-        redirect_to admin_products_path, alert: t('flash.admin.products.destroy.alert')
+          redirect_to admin_products_path,
+                      alert: product.errors.full_messages.to_sentence.presence || t('flash.admin.products.destroy.alert')
         end
       end
     
@@ -56,7 +65,9 @@ rescue_from ActiveRecord::RecordNotFound, with: :redirect_product_not_found
       end
 
       def product_params
-        params.require(:product).permit(:name, :price, :stock, :status, :description, :store_id);
+        params.require(:product).permit(
+          :name, :status, :description, :store_id,
+          skus_attributes: [:id, :code, :price, :stock, :_destroy]);
       end
 
 end

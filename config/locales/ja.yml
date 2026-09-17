@@ -36,6 +36,7 @@ ja:
     attributes:
       cart_item:
         quantity: 数量
+        sku_id: SKU
         product: 商品
         price: 価格
         total_price: 合計金額
@@ -43,27 +44,48 @@ ja:
         updated_at: 更新日時
       product:
         name: 商品名
-        price: 価格
-        stock: 在庫数
         status: ステータス
         description: 説明
         store: 店舗
+        skus: SKU
         created_at: 作成日時
         updated_at: 更新日時
+      # 入れ子フォームのエラー（skus.stock など）用
+      "product/skus":
+        code: SKUコード
+        price: 価格
+        stock: 在庫数
+        _destroy: 削除
       store:
         name: 店舗名
         store_number: 店舗番号
         created_at: 作成日時
         updated_at: 更新日時
+      sku:
+        code: SKUコード
+        price: 価格
+        stock: 在庫数
+        _destroy: 削除
+        created_at: 作成日時
+        updated_at: 更新日時
     errors:
       messages:
         blank: を入力してください
+        taken: は登録済みのコードです
         not_a_number: は数値で入力してください
         not_an_integer: は整数で入力してください
         greater_than_or_equal_to: は%{count}以上にしてください
       models:
+        product:
+          attributes:
+            skus:
+              blank: は1件以上必要です
+            base:
+              in_cart: カートに入っているため削除できません
+              sku_in_cart: カートに入っているSKUは削除できません
         cart_item:
           not_available: この商品はカートに追加できません
+          sold_out: この商品は売り切れです
           attributes:
             quantity:
               less_than_or_equal_to: は在庫数(%{count})以下にしてください

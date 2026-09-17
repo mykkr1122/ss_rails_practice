@@ -1,7 +1,7 @@
 class ProductsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :redirect_product_not_found
   def index
-    @products = Product.published;
+    @products = Product.published.includes(:skus);
     if params[:q]
       @products = @products.where('name LIKE ?', "%#{params[:q]}%")
     end
