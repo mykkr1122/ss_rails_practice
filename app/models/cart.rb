@@ -1,5 +1,4 @@
 class Cart < ApplicationRecord
-
   # カートに紐づくカートアイテムを削除する
   has_many :cart_items, dependent: :destroy
 
@@ -22,7 +21,8 @@ class Cart < ApplicationRecord
     end
 
     item.quantity = item.quantity.to_i + quantity
-    item.save
+    return item unless item.save
+    
     item
   end
 end
