@@ -2,8 +2,8 @@
 
 one:
   name: MyString
-  store_id: 1
+  store_number: 1
 
 two:
   name: MyString
-  store_id: 1
+  store_number: 2

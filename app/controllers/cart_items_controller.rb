@@ -1,7 +1,7 @@
 class CartItemsController < ApplicationController
   def create
     sku = Sku.joins(:product).merge(Product.published).find_by(id: cart_item_params[:sku_id])
-    item = current_cart.add_sku(sku, cart_item_params[:quantity])
+    item = find_or_create_cart.add_sku(sku, cart_item_params[:quantity])
   
     if item.errors.empty?
       redirect_to cart_path, notice: t('flash.cart_items.create.notice')
@@ -13,6 +13,7 @@ class CartItemsController < ApplicationController
   end
   
   def update
+    raise ActiveRecord::RecordNotFound if current_cart.blank?
     item = current_cart.cart_items.find(params[:id])
     if item.update(cart_item_update_params)
       redirect_to cart_path, notice: t('flash.cart_items.update.notice')
@@ -24,6 +25,7 @@ class CartItemsController < ApplicationController
   end
   
   def destroy
+    raise ActiveRecord::RecordNotFound if current_cart.blank?
     item = current_cart.cart_items.find(params[:id])
     if item.destroy
       redirect_to cart_path, notice: t('flash.cart_items.destroy.notice')

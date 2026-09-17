@@ -1,6 +1,10 @@
 class CartsController < ApplicationController
   def show
     @cart = current_cart
-    @cart_items = @cart.cart_items.includes(sku: :product)
+    @cart_items = if @cart
+                  @cart.cart_items.includes(sku: :product)
+                  else
+                    CartItem.none
+                  end
   end
 end

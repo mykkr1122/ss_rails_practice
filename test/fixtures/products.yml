@@ -2,6 +2,10 @@
 
 one:
   name: MyString
+  status: published
+  store: one
 
 two:
   name: MyString
+  status: hidden
+  store: two

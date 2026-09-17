@@ -25,7 +25,7 @@ class Product < ApplicationRecord
 
   # 商品の価格を表示
   def display_price
-    skus.minimum(:price)
+    skus.map(&:price).compact.min
   end
 
   private
