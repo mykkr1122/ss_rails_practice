@@ -2,10 +2,10 @@
 
 one:
   cart: one
-  product: one
+  sku: one
   quantity: 1
 
 two:
   cart: two
-  product: two
+  sku: two
   quantity: 1
