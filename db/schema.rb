@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_09_17_053152) do
+ActiveRecord::Schema.define(version: 2026_09_17_063743) do
 
   create_table "cart_items", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "cart_id", null: false
@@ -24,6 +24,24 @@ ActiveRecord::Schema.define(version: 2026_09_17_053152) do
   end
 
   create_table "carts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "order_items", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.bigint "sku_id", null: false
+    t.integer "quantity", null: false
+    t.integer "price", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["order_id"], name: "index_order_items_on_order_id"
+    t.index ["sku_id"], name: "index_order_items_on_sku_id"
+  end
+
+  create_table "orders", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "customer_name", null: false
+    t.string "customer_email", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -59,6 +77,8 @@ ActiveRecord::Schema.define(version: 2026_09_17_053152) do
 
   add_foreign_key "cart_items", "carts"
   add_foreign_key "cart_items", "skus"
+  add_foreign_key "order_items", "orders"
+  add_foreign_key "order_items", "skus"
   add_foreign_key "products", "stores"
   add_foreign_key "skus", "products"
 end

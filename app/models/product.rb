@@ -28,6 +28,10 @@ class Product < ApplicationRecord
     skus.map(&:price).compact.min
   end
 
+  def sold_out
+    skus.all? { |sku| sku.stock.to_i <= 0 }
+  end
+
   private
 
   def must_have_sku
