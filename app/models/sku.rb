@@ -1,5 +1,7 @@
 class Sku < ApplicationRecord
   has_many :cart_items, dependent: :restrict_with_error
+  # 注文がある場合は削除できない
+  has_many :order_items, dependent: :restrict_with_error
   belongs_to :product
   
   validates :code, presence: true, uniqueness: true

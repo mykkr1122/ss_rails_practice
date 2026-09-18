@@ -19,3 +19,4 @@
           %p この商品は現在購入できません
         = button_to '削除', cart_item_path(item), method: :delete, data: { confirm: '削除しますか？' }
   %p= "合計: #{@cart_items.sum { |i| i.sku.price * i.quantity }}円"
+  %p= link_to '注文へ進む', new_order_path

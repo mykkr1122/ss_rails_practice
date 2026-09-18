@@ -14,7 +14,11 @@
     <% @products.each do |product| %>
       <li class="product-card">
         <%= link_to product.name, product_path(product), class: 'product-card__name' %>
-        <p class="product-card__price"><%= product.display_price %>円〜</p>
+        <% if product.sold_out %>
+          <p class="product-card__sold-out">売り切れ</p>
+        <% else %>
+          <p class="product-card__price"><%= product.display_price %>円〜</p>
+        <% end %>
       </li>
     <% end %>
   </ul>

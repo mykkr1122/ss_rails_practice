@@ -1,0 +1,18 @@
+%h1 注文完了
+
+%p= "注文番号: #{@order.id}"
+%p= "お名前: #{@order.customer_name}"
+%p= "メールアドレス: #{@order.customer_email}"
+
+%ul
+  - @order.order_items.each do |item|
+    %li
+      %p= item.product.name
+      %p= "SKU: #{item.sku.code}"
+      %p= "#{item.price}円 ✕  #{item.quantity}個"
+      %p= "小計: #{item.price * item.quantity}円"
+
+%p= "注文日時: #{@order.created_at.strftime('%Y-%m-%d %H:%M:%S')}"
+%p= "合計金額: #{@order.total_price }円"
+
+%p= link_to '商品一覧へ戻る', products_path
