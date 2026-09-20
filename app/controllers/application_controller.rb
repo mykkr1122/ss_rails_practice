@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  helper_method :current_cart
+  helper_method :current_cart, :unpaid_order
 
   private
 
@@ -16,5 +16,15 @@ class ApplicationController < ActionController::Base
         session[:cart_id] = cart.id
         cart
     end
+  end
+
+  # 未支払いの注文を取得
+  def unpaid_order
+    return if session[:order_id].blank?
+
+    @unpaid_order ||= Order.find_by(id: session[:order_id])
+    return unless @unpaid_order&.status_new?
+
+    @unpaid_order
   end
 end

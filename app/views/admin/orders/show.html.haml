@@ -15,5 +15,9 @@
 
 %p= "注文日時: #{@order.created_at.strftime('%Y-%m-%d %H:%M:%S')}"
 %p= "合計金額: #{@order.total_price}円"
+%p= "ステータス: #{t("enums.order.status.#{@order.status}")}"
+
+- if @order.status_new?
+  %p= button_to '注文を完了にする', complete_admin_order_path(@order), method: :post
 
 %p= link_to '注文一覧へ', admin_orders_path

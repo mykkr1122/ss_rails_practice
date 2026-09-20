@@ -1,4 +1,14 @@
 class Order < ApplicationRecord
+
+  # 注文ステータス
+  # new: 新規注文
+  # complete: 注文完了
+  enum status: {
+    new: 0,
+    complete: 1
+  },
+  _prefix: :status
+
   has_many :order_items, dependent: :destroy
 
   validates :customer_name, presence: true

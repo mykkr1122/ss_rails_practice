@@ -22,6 +22,9 @@
               </ul>
             </div>
             <%= link_to "カート(#{current_cart&.cart_items&.sum(:quantity).to_i})", cart_path %>
+            <% if unpaid_order %>
+              <%= link_to "お支払い", payment_order_path(unpaid_order) %>
+            <% end %>
           </nav>
         </div>
       </header>

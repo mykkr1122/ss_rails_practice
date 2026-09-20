@@ -23,6 +23,9 @@ ja:
         not_found: 商品が見つかりませんでした
       orders:
         not_found: 注文が見つかりませんでした
+        complete:
+          notice: 注文を完了しました
+          alert: この注文は既に完了しています
     cart_items:
       create:
         notice: カートに追加しました
@@ -36,10 +39,20 @@ ja:
       not_found: カートの商品が見つかりませんでした
     orders:
       create:
-        notice: 注文を受け付けました
+        notice: 注文を受け付けました。 決済画面へ移動します。
         alert: 注文を確定できませんでした
+      pay:
+        already: この注文は既に支払いが完了しています
+        notice: 決済が完了しました
+        alert: 決済を完了できませんでした
       not_found: 注文が見つかりませんでした
       empty_cart: カートが空です
+      unpaid_exists: 未支払いの注文があります。先に決済を完了してください
+  enums:
+    order:
+      status:
+        new: 新規
+        complete: 完了
   activerecord:
     attributes:
       cart_item:
@@ -79,6 +92,7 @@ ja:
       order:
         customer_name: お名前
         customer_email: メールアドレス
+        status: ステータス
         created_at: 作成日時
         updated_at: 更新日時
       order_item:
@@ -103,6 +117,8 @@ ja:
             base:
               in_cart: カートに入っているため削除できません
               sku_in_cart: カートに入っているSKUは削除できません
+              in_order: 注文中のため削除できません
+              sku_in_order: 注文中のSKUは削除できません
         cart_item:
           not_available: この商品はカートに追加できません
           sold_out: この商品は売り切れです
