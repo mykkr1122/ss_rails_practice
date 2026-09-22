@@ -25,6 +25,13 @@
             <% if unpaid_order %>
               <%= link_to "お支払い", payment_order_path(unpaid_order) %>
             <% end %>
+            <% if user_signed_in? %>
+              <%= link_to '注文履歴', orders_path %>
+              <%= link_to '会員情報', edit_user_registration_path %>
+              <%= link_to 'ログアウト', destroy_user_session_path, method: :delete %>
+            <% else %>
+              <%= link_to 'ログイン', new_user_session_path %>
+            <% end %>
           </nav>
         </div>
       </header>
