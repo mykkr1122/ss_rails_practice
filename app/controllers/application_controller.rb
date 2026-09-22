@@ -54,7 +54,7 @@ class ApplicationController < ActionController::Base
       order = if user_signed_in?
                 current_user.orders.find_by(status: :new)
               elsif session[:order_id].present?
-                Order.find_by(id: session[:order_id])
+                Order.find_by(id: session[:order_id], user_id: nil)
               end
       order if order&.status_new?
     end
@@ -78,10 +78,16 @@ class ApplicationController < ActionController::Base
 
   def attach_guest_order_to_user(user)
     return if session[:order_id].blank?
-
-    order = Order.find_by(id: session[:order_id])
-    return unless order&.user_id.blank?
-
-    order.update(user: user)
+  
+    order = Order.find_by(id: session[:order_id], user_id: nil)
+    return if order.blank?
+  
+    existing = user.orders.find_by(status: :new)
+    if existing
+      session[:order_id] = existing.id
+      return
+    end
+  
+    order.update!(user: user)
   end
 end
