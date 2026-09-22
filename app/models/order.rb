@@ -9,14 +9,15 @@ class Order < ApplicationRecord
   },
   _prefix: :status
 
+  belongs_to :user, optional: true
   has_many :order_items, dependent: :destroy
 
   validates :customer_name, presence: true
   # URI::MailTo::EMAIL_REGEXPでメールアドレスの形式をチェック
   validates :customer_email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
 
-  def self.create_from_cart(cart, customer_name, customer_email)
-    order = new(customer_name: customer_name, customer_email: customer_email)
+  def self.create_from_cart(cart, customer_name, customer_email, user: nil)
+    order = new(customer_name: customer_name, customer_email: customer_email, user: user)
     items = cart&.cart_items.to_a
 
     if items.empty?

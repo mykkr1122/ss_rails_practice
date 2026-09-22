@@ -7,4 +7,6 @@
 
 = button_to '決済する', pay_order_path(@order), method: :post, class: 'btn btn-primary'
 
+- if user_signed_in?
+  %p= link_to '注文履歴へ', orders_path
 %p= link_to '商品一覧画面に戻る', products_path

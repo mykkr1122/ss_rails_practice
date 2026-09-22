@@ -6,7 +6,6 @@ class Admin::OrdersController < ApplicationController
 
   def index
     @q = Order.ransack(search_params)
-    # 注文を作成日時の降順で取得
     @orders = @q.result(distinct: true)
               .includes(order_items: { sku: :product})
               .order(created_at: :desc)

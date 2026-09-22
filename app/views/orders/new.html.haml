@@ -18,13 +18,19 @@
 
 %p= "合計: #{@cart_items.sum{ |i| i.sku.price * i.quantity}}円"
 
-= form_with model: @order, local: true do |f|
-  %p
-    = f.label :customer_name
-    = f.text_field :customer_name
-  %p
-    = f.label :customer_email
-    = f.email_field :customer_email
-  %p= f.submit '注文確定'
+- if user_signed_in?
+  %p= "お名前: #{@order.customer_name}"
+  %p= "メールアドレス: #{@order.customer_email}"
+  = form_with url: orders_path, method: :post, local: true do
+    %p= submit_tag '注文確定'
+- else
+  = form_with model: @order, local: true do |f|
+    %p
+      = f.label :customer_name
+      = f.text_field :customer_name
+    %p
+      = f.label :customer_email
+      = f.email_field :customer_email
+    %p= f.submit '注文確定'
 
 %p= link_to 'カートへ戻る', cart_path

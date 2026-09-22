@@ -62,7 +62,7 @@ class Admin::ProductsController < ApplicationController
   def redirect_product_not_found
     redirect_to admin_products_path, alert: t('flash.admin.products.not_found')
   end
-  
+
   def search_params
     params.fetch(:q, {}).permit(:name_cont)
   end
