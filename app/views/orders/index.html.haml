@@ -1,0 +1,12 @@
+%h1 注文履歴
+
+- if @orders.blank?
+  %p 注文がありません
+- else
+  %ul
+    - @orders.each do |order|
+      %li
+        %p= link_to "注文番号: #{order.id}", order.status_new? ? payment_order_path(order) : order_path(order)
+        %p= "注文日時: #{order.created_at.strftime('%Y-%m-%d %H:%M:%S')}"
+        %p= "合計: #{order.total_price}円"
+        %p= "ステータス: #{t("enums.order.status.#{order.status}")}"

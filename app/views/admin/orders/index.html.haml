@@ -13,7 +13,7 @@
     = f.search_field :customer_email_cont
   %p
     = f.label :status_eq, Order.human_attribute_name(:status)
-    = f.select :status_eq, Order.statuses.keys.map { |status| [t("enums.order.status.#{status}"), status] }, { include_blank: 'すべて' }
+    = f.select :status_eq, Order.statuses.map { |status, value| [t("enums.order.status.#{status}"), value] }, { include_blank: 'すべて' }
   %p= f.submit '検索'
 
 - if @orders.blank?

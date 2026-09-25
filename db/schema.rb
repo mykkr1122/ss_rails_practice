@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_09_18_084909) do
+ActiveRecord::Schema.define(version: 2026_09_22_070000) do
 
   create_table "cart_items", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "cart_id", null: false
@@ -26,6 +26,8 @@ ActiveRecord::Schema.define(version: 2026_09_18_084909) do
   create_table "carts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_carts_on_user_id", unique: true
   end
 
   create_table "order_items", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -45,6 +47,8 @@ ActiveRecord::Schema.define(version: 2026_09_18_084909) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "status", default: 0, null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
   create_table "products", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -76,10 +80,22 @@ ActiveRecord::Schema.define(version: 2026_09_18_084909) do
     t.index ["store_number"], name: "index_stores_on_store_number", unique: true
   end
 
+  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.datetime "remember_created_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+  end
+
   add_foreign_key "cart_items", "carts"
   add_foreign_key "cart_items", "skus"
+  add_foreign_key "carts", "users"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "skus"
+  add_foreign_key "orders", "users"
   add_foreign_key "products", "stores"
   add_foreign_key "skus", "products"
 end

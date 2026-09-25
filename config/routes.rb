@@ -1,11 +1,13 @@
 Rails.application.routes.draw do
+  devise_for :users
+
   root "products#index"
   resources :products, only: [:index, :show]
 
   resource :cart, only: [:show]
   resources :cart_items, only: [:create, :update, :destroy]
 
-  resources :orders, only: [:new, :create, :show] do
+  resources :orders, only: [:index, :new, :create, :show] do
     member do
       get :payment
       post :pay

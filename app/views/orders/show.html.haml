@@ -16,4 +16,6 @@
 %p= "合計金額: #{@order.total_price }円"
 %p= "ステータス: #{t("enums.order.status.#{@order.status}")}"
 
+- if user_signed_in?
+  %p= link_to '注文履歴へ', orders_path
 %p= link_to '商品一覧へ戻る', products_path
