@@ -1,0 +1,3 @@
+%h1 商品を編集
+= render 'form', product: @product
+%p= link_to '詳細へ', admin_product_path(@product), class: 'btn btn-default'

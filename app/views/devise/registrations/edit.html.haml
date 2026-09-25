@@ -1,26 +1,27 @@
 %h1 会員情報
 
 - if resource.errors.any?
-  %ul
-    - resource.errors.full_messages.each do |message|
-      %li= message
+  .alert.alert-danger
+    %ul
+      - resource.errors.full_messages.each do |message|
+        %li= message
 
 = form_with model: resource, as: resource_name, url: registration_path(resource_name), method: :put, local: true do |f|
-  %p
+  .form-group
     = f.label :name
-    = f.text_field :name, autofocus: true
-  %p
+    = f.text_field :name, autofocus: true, class: 'form-control'
+  .form-group
     = f.label :email
-    = f.email_field :email, autocomplete: 'email'
-  %p
+    = f.email_field :email, autocomplete: 'email', class: 'form-control'
+  .form-group
     = f.label :current_password
-    = f.password_field :current_password, autocomplete: 'current-password'
-  %p
+    = f.password_field :current_password, autocomplete: 'current-password', class: 'form-control'
+  .form-group
     = f.label :password
-    = f.password_field :password, autocomplete: 'new-password'
-  %p
+    = f.password_field :password, autocomplete: 'new-password', class: 'form-control'
+  .form-group
     = f.label :password_confirmation
-    = f.password_field :password_confirmation, autocomplete: 'new-password'
-  %p= f.submit '更新する'
+    = f.password_field :password_confirmation, autocomplete: 'new-password', class: 'form-control'
+  = f.submit '更新する', class: 'btn btn-primary'
 
-%p= link_to '注文履歴へ', orders_path
+%p= link_to '注文履歴へ', orders_path, class: 'btn btn-default'

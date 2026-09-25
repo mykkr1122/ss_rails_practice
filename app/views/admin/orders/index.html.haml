@@ -1,30 +1,49 @@
 %h1 受注一覧
-%p= link_to '商品管理へ', admin_products_path
+%p= link_to '商品管理へ', admin_products_path, class: 'btn btn-default'
 
-= search_form_for @q, url: admin_orders_path do |f|
-  %p
-    = f.label :id_eq, '注文番号'
-    = f.search_field :id_eq
-  %p
-    = f.label :customer_name_cont, Order.human_attribute_name(:customer_name)
-    = f.search_field :customer_name_cont
-  %p
-    = f.label :customer_email_cont, Order.human_attribute_name(:customer_email)
-    = f.search_field :customer_email_cont
-  %p
-    = f.label :status_eq, Order.human_attribute_name(:status)
-    = f.select :status_eq, Order.statuses.map { |status, value| [t("enums.order.status.#{status}"), value] }, { include_blank: 'すべて' }
-  %p= f.submit '検索'
+.search-panel.panel.panel-default
+  .panel-body
+    = search_form_for @q, url: admin_orders_path do |f|
+      .row
+        .col-sm-3
+          .form-group
+            = f.label :id_eq, '注文番号'
+            = f.search_field :id_eq, class: 'form-control'
+        .col-sm-3
+          .form-group
+            = f.label :customer_name_cont, Order.human_attribute_name(:customer_name)
+            = f.search_field :customer_name_cont, class: 'form-control'
+        .col-sm-3
+          .form-group
+            = f.label :customer_email_cont, Order.human_attribute_name(:customer_email)
+            = f.search_field :customer_email_cont, class: 'form-control'
+        .col-sm-3
+          .form-group
+            = f.label :status_eq, Order.human_attribute_name(:status)
+            = f.select :status_eq, Order.statuses.map { |status, value| [t("enums.order.status.#{status}"), value] }, { include_blank: 'すべて' }, class: 'form-control'
+      .text-right
+        = link_to 'クリア', admin_orders_path, class: 'btn btn-default'
+        = f.submit '検索', class: 'btn btn-primary'
 
 - if @orders.blank?
   %p 注文がありません
 - else
-  %ul
-    - @orders.each do |order|
-      %li
-        %p= link_to "注文番号: #{order.id}", admin_order_path(order)
-        %p= "お名前: #{order.customer_name}"
-        %p= "メールアドレス: #{order.customer_email}"
-        %p= "注文日時: #{order.created_at.strftime('%Y-%m-%d %H:%M:%S')}"
-        %p= "合計: #{order.total_price}円"
-        %p= "ステータス: #{t("enums.order.status.#{order.status}")}"
+  %table.table.table-striped
+    %thead
+      %tr
+        %th 注文番号
+        %th 氏名
+        %th メールアドレス
+        %th 注文日時
+        %th 合計金額
+        %th 決済状況
+    %tbody
+      - @orders.each do |order|
+        %tr
+          %td= link_to order.id, admin_order_path(order)
+          %td= order.customer_name
+          %td= order.customer_email
+          %td= order.created_at.strftime('%Y-%m-%d %H:%M:%S')
+          %td= "#{order.total_price}円"
+          %td
+            %span.label.label-info= t("enums.order.status.#{order.status}")

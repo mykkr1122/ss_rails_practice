@@ -51,8 +51,8 @@ ja:
   enums:
     order:
       status:
-        new: 新規
-        complete: 完了
+        new: 未決済
+        complete: 決済完了
   activerecord:
     attributes:
       cart_item:
@@ -97,7 +97,7 @@ ja:
         current_password: 現在のパスワード
         remember_me: ログインしたままにする
       order:
-        customer_name: お名前
+        customer_name: 氏名
         customer_email: メールアドレス
         status: ステータス
         created_at: 作成日時

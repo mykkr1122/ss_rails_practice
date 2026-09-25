@@ -1,21 +1,32 @@
 %h1 注文完了
 
 %p= "注文番号: #{@order.id}"
-%p= "お名前: #{@order.customer_name}"
+%p= "氏名: #{@order.customer_name}"
 %p= "メールアドレス: #{@order.customer_email}"
 
-%ul
-  - @order.order_items.each do |item|
-    %li
-      %p= item.product.name
-      %p= "SKU: #{item.sku.code}"
-      %p= "#{item.price}円 ✕  #{item.quantity}個"
-      %p= "小計: #{item.price * item.quantity}円"
+%table.table.table-striped.table-bordered
+  %thead
+    %tr
+      %th 商品名
+      %th SKU
+      %th 価格
+      %th 数量
+      %th 小計
+  %tbody
+    - @order.order_items.each do |item|
+      %tr
+        %td= item.product.name
+        %td= item.sku.code
+        %td= "#{item.price}円"
+        %td= item.quantity
+        %td= "#{item.price * item.quantity}円"
 
 %p= "注文日時: #{@order.created_at.strftime('%Y-%m-%d %H:%M:%S')}"
 %p= "合計金額: #{@order.total_price }円"
-%p= "ステータス: #{t("enums.order.status.#{@order.status}")}"
+%p
+  決済状況:
+  %span.label.label-info= t("enums.order.status.#{@order.status}")
 
 - if user_signed_in?
-  %p= link_to '注文履歴へ', orders_path
-%p= link_to '商品一覧へ戻る', products_path
+  %p= link_to '注文履歴へ', orders_path, class: 'btn btn-default'
+%p= link_to '商品一覧へ戻る', products_path, class: 'btn btn-default'
