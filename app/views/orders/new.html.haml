@@ -1,0 +1,26 @@
+%h1 注文確認
+
+%ul
+  - @cart_items.each do |item|
+    %li
+      %p= item.product.name
+      %p= "SKU: #{item.sku.code}"
+      %p= "#{item.sku.price}円 ✕  #{item.quantity}個"
+      %p= "小計: #{item.sku.price * item.quantity}円"
+- if @order.errors[:base].any?
+  %ul
+    - @order.errors.full_messages_for(:base).each do |message|
+      %li= message
+
+%p= "合計: #{@cart_items.sum{ |i| i.sku.price * i.quantity}}円"
+
+= form_with model: @order, local: true do |f|
+  %p
+    = f.label :customer_name
+    = f.text_field :customer_name
+  %p
+    = f.label :customer_email
+    = f.email_field :customer_email
+  %p= f.submit '注文確定'
+
+%p= link_to 'カートへ戻る', cart_path
