@@ -1,6 +1,6 @@
-require 'application_system_test_case'
+require 'rails_helper'
 
-class CartsTest < ApplicationSystemTestCase
+RSpec.describe "Carts", type: :system do
   def add_test_item_to_cart(name:, code:)
     product = Product.new(name: name, status: :published)
     sku = product.skus.build(code: code, price: 100, stock: 5)
@@ -13,28 +13,28 @@ class CartsTest < ApplicationSystemTestCase
     product
   end
 
-  test 'カート削除ボタンはブラウザ標準ではなく独自の確認モーダルを表示する' do
+  it 'カート削除ボタンはブラウザ標準ではなく独自の確認モーダルを表示する' do
     product = add_test_item_to_cart(name: 'カート削除確認用', code: "CART-CANCEL-#{SecureRandom.hex(4)}")
 
     visit cart_path
     click_button '削除'
 
     within '#confirmModal' do
-      assert_text '削除しますか？'
+      expect(page).to have_text('削除しますか？')
       click_button 'キャンセル'
     end
 
-    assert_text product.name
+    expect(page).to have_text(product.name)
   end
 
-  test '確認モーダルでOKを押すとカートから商品が削除される' do
+  it '確認モーダルでOKを押すとカートから商品が削除される' do
     product = add_test_item_to_cart(name: 'カート削除実行用', code: "CART-OK-#{SecureRandom.hex(4)}")
 
     visit cart_path
     click_button '削除'
     within('#confirmModal') { click_button 'OK' }
 
-    assert_text 'カートから削除しました'
-    assert_no_text product.name
+    expect(page).to have_text('カートから削除しました')
+    expect(page).to have_no_text(product.name)
   end
 end
