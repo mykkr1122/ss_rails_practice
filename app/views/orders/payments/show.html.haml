@@ -7,7 +7,7 @@
   決済状況:
   %span.label.label-info= t("enums.order.status.#{@order.status}")
 
-= button_to '決済する', pay_order_path(@order), method: :post, class: 'btn btn-primary'
+= button_to '決済する', order_payment_path(@order), method: :post, class: 'btn btn-primary'
 
 - if user_signed_in?
   %p= link_to '注文履歴へ', orders_path, class: 'btn btn-default'

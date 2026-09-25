@@ -23,7 +23,7 @@
               カート
               %span.badge= current_cart&.cart_items&.sum(:quantity).to_i
             - if unpaid_order
-              = link_to "お支払い", payment_order_path(unpaid_order)
+              = link_to "お支払い", order_payment_path(unpaid_order)
             - if user_signed_in?
               = link_to '注文履歴', orders_path
               = link_to '会員情報', edit_user_registration_path

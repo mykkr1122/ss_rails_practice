@@ -22,6 +22,6 @@
   %p
     %strong= "合計: #{@cart_items.sum { |i| i.sku.price * i.quantity }}円"
   - if unpaid_order
-    %p= link_to '未支払いの注文へ', payment_order_path(unpaid_order), class: 'btn btn-primary'
+    %p= link_to '未支払いの注文へ', order_payment_path(unpaid_order), class: 'btn btn-primary'
   - else
     %p= link_to '注文へ進む', new_order_path, class: 'btn btn-primary'

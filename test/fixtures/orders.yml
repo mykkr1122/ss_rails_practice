@@ -4,8 +4,10 @@ one:
   customer_name: 山田太郎
   customer_email: taro@example.com
   status: new
+  user: one
 
 two:
   customer_name: 佐藤花子
   customer_email: hanako@example.com
   status: complete
+  user: two

@@ -1,9 +1,10 @@
 class Admin::OrdersController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :redirect_order_not_found
 
-  before_action :set_order, only: [:show, :complete]
-  before_action :reject_if_completed, only: [:complete]
+  before_action :set_order, only: [:show]
 
+  # GET /admin/orders
+  # 受注一覧を表示する。ransackによる検索に対応。
   def index
     @q = Order.ransack(search_params)
     @orders = @q.result(distinct: true)
@@ -11,12 +12,9 @@ class Admin::OrdersController < ApplicationController
               .order(created_at: :desc)
   end
 
+  # GET /admin/orders/:id
+  # 受注詳細を表示する。
   def show
-  end
-
-  def complete
-    @order.status_complete!
-    redirect_to admin_order_path(@order), notice: t('flash.admin.orders.complete.notice')
   end
 
   private
@@ -31,11 +29,5 @@ class Admin::OrdersController < ApplicationController
 
   def set_order
     @order = Order.includes(order_items: { sku: :product}).find(params[:id])
-  end
-
-  def reject_if_completed
-    return unless @order.status_complete?
-
-    redirect_to admin_order_path(@order), alert: t('flash.admin.orders.complete.alert')
   end
 end

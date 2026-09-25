@@ -14,4 +14,9 @@ end
 
 class ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
+
+  def auth_headers_for(user, password: "password")
+    post "/api/v1/login", params: { email: user.email, password: password }, as: :json
+    { "Authorization" => response.headers["Authorization"] }
+  end
 end
