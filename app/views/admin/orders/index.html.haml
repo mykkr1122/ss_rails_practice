@@ -1,9 +1,24 @@
 %h1 受注一覧
 %p= link_to '商品管理へ', admin_products_path
 
+= search_form_for @q, url: admin_orders_path do |f|
+  %p
+    = f.label :id_eq, '注文番号'
+    = f.search_field :id_eq
+  %p
+    = f.label :customer_name_cont, Order.human_attribute_name(:customer_name)
+    = f.search_field :customer_name_cont
+  %p
+    = f.label :customer_email_cont, Order.human_attribute_name(:customer_email)
+    = f.search_field :customer_email_cont
+  %p
+    = f.label :status_eq, Order.human_attribute_name(:status)
+    = f.select :status_eq, Order.statuses.keys.map { |status| [t("enums.order.status.#{status}"), status] }, { include_blank: 'すべて' }
+  %p= f.submit '検索'
+
 - if @orders.blank?
   %p 注文がありません
-- else 
+- else
   %ul
     - @orders.each do |order|
       %li
@@ -12,3 +27,4 @@
         %p= "メールアドレス: #{order.customer_email}"
         %p= "注文日時: #{order.created_at.strftime('%Y-%m-%d %H:%M:%S')}"
         %p= "合計: #{order.total_price}円"
+        %p= "ステータス: #{t("enums.order.status.#{order.status}")}"

@@ -1,9 +1,9 @@
 <h1>商品管理</h1>
 <p><%= link_to '商品を登録', new_admin_product_path %></p>
 
-<%= form_with url: admin_products_path, method: :get, local: true, class: 'search-form' do %>
-  <%= text_field_tag :q, params[:q], placeholder: '商品名で検索' %>
-  <%= submit_tag '検索' %>
+<%= search_form_for @q, url: admin_products_path, class: 'search-form' do |f| %>
+  <%= f.search_field :name_cont, placeholder: '商品名で検索' %>
+  <%= f.submit '検索' %>
 <% end %>
 
 <% if @products.blank? %>

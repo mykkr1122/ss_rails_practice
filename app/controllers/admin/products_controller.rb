@@ -2,10 +2,9 @@ class Admin::ProductsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :redirect_product_not_found
 
   def index
-    @products = Product.all.includes(:skus)
-    if params[:q]
-      @products = @products.where('name LIKE ?', "%#{params[:q]}%")
-    end
+    @q = Product.ransack(search_params)
+    @products = @q.result(distinct: true)
+                .includes(:skus)
   end
 
   def show
@@ -62,6 +61,10 @@ class Admin::ProductsController < ApplicationController
 
   def redirect_product_not_found
     redirect_to admin_products_path, alert: t('flash.admin.products.not_found')
+  end
+  
+  def search_params
+    params.fetch(:q, {}).permit(:name_cont)
   end
 
   def product_params

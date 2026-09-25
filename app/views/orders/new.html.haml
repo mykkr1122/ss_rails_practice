@@ -1,5 +1,9 @@
 %h1 注文確認
 
+- [:customer_name, :customer_email].each do |attr|
+  - @order.errors.full_messages_for(attr).each do |message|
+    %p= message
+
 %ul
   - @cart_items.each do |item|
     %li
