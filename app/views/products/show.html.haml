@@ -1,0 +1,18 @@
+%article.product-detail
+  %h1= @product.name
+  %p= simple_format(@product.description)
+  - if @product.skus.blank? || @product.sold_out?
+    .alert.alert-warning 売り切れました。
+  - else
+    = form_with model: CartItem.new, url: cart_items_path, local: true do |f|
+      = hidden_field_tag :product_id, @product.id
+      .form-group
+        = f.label :sku_id, 'SKU'
+        - sku_options = @product.skus.map { |s| [s.stock.to_i <= 0 ? "#{s.code_with_price}(売り切れ)" : s.code_with_price, s.id, { disabled: s.stock.to_i <= 0 }] }
+        = f.select :sku_id, options_for_select(sku_options), { include_blank: '選択してください' }, class: 'form-control'
+      .form-group
+        = f.label :quantity, '数量'
+        = f.number_field :quantity, value: 1, min: 1, class: 'form-control'
+      = f.submit 'カートに追加', class: 'btn btn-primary'
+  %p
+    = link_to '一覧へ', products_path, class: 'btn btn-default'

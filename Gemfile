@@ -4,6 +4,10 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.7.8'
 
 gem 'concurrent-ruby', '1.3.4'
+# Pin below 3.0: activesupport 6.0's JSON encoder passes quirks_mode:,
+# which json 3.x dropped support for (pulled in transitively via
+# bootstrap-sass -> autoprefixer-rails -> execjs).
+gem 'json', '~> 2.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 6.0.6', '>= 6.0.6.1'
@@ -19,6 +23,11 @@ gem 'mysql2', '>= 0.4.4'
 gem 'puma', '~> 4.1'
 # Use SCSS for stylesheets
 gem 'sass-rails', '>= 6'
+# Bootstrap 3 via Sass, plus jQuery for its JS components (dropdown/modal/collapse)
+gem 'bootstrap-sass', '~> 3.4'
+gem 'jquery-rails'
+# CoffeeScript support for the asset pipeline
+gem 'coffee-rails', '~> 5.0'
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 # gem 'webpacker', '~> 4.0'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
@@ -49,6 +58,8 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+
+  gem 'html2haml'
 end
 
 group :test do

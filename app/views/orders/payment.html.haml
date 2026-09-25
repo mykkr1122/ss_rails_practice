@@ -1,12 +1,14 @@
 %h1 お支払い
 %p= "注文番号: #{@order.id}"
-%p= "お名前: #{@order.customer_name}"
+%p= "氏名: #{@order.customer_name}"
 %p= "メールアドレス: #{@order.customer_email}"
 %p= "合計金額: #{@order.total_price}円"
-%p= "ステータス: #{t("enums.order.status.#{@order.status}")}"
+%p
+  決済状況:
+  %span.label.label-info= t("enums.order.status.#{@order.status}")
 
 = button_to '決済する', pay_order_path(@order), method: :post, class: 'btn btn-primary'
 
 - if user_signed_in?
-  %p= link_to '注文履歴へ', orders_path
-%p= link_to '商品一覧画面に戻る', products_path
+  %p= link_to '注文履歴へ', orders_path, class: 'btn btn-default'
+%p= link_to '商品一覧画面に戻る', products_path, class: 'btn btn-default'

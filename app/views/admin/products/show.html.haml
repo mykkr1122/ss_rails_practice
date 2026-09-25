@@ -1,0 +1,26 @@
+%article.product-detail
+  %h1= @product.name
+  %p
+    店舗: #{@product.store&.label_for_select}
+  %p= simple_format(@product.description)
+  %table.table.table-striped.table-bordered
+    %thead
+      %tr
+        %th SKUコード
+        %th 販売価格
+        %th 在庫
+    %tbody
+      - @product.skus.each do |sku|
+        %tr
+          %td= sku.code
+          %td
+            = sku.price
+            円
+          %td= sku.stock
+  %p
+    状態:
+    %span{class: "label #{@product.published? ? 'label-success' : 'label-default'}"}= @product.status_label
+  .product-detail__actions
+    = link_to '編集', edit_admin_product_path(@product), class: 'btn btn-primary'
+    = button_to '削除', admin_product_path(@product), method: :delete, data: { confirm: '削除しますか？' }, class: 'btn btn-danger'
+    = link_to '一覧へ', admin_products_path, class: 'btn btn-default'

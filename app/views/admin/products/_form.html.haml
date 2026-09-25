@@ -1,0 +1,45 @@
+- if product.errors.any?
+  .alert.alert-danger#error_explanation
+    %h4
+      = product.errors.count
+      件のエラーがあります。
+    %ul
+      - product.errors.full_messages.each do |message|
+        %li= message
+= form_with model: [:admin,product], local: true do |form|
+  .form-group
+    = form.label :name, '商品名'
+    %br/
+    = form.text_field :name, class: 'form-control'
+  .form-group
+    = form.label :store_id, '店舗'
+    %br/
+    = form.collection_select :store_id, Store.order(:store_number), :id, :label_for_select, { include_blank: true }, class: 'form-control'
+  .form-group
+    = form.label :description, '説明'
+    %br/
+    = form.text_area :description, class: 'form-control'
+  %table.table.table-bordered
+    %thead
+      %tr
+        %th SKUコード
+        %th 価格
+        %th 在庫
+        - if product.persisted?
+          %th 削除
+    %tbody
+      = form.fields_for :skus do |sku_form|
+        %tr
+          %td
+            = sku_form.hidden_field :id
+            = sku_form.text_field :code, class: 'form-control'
+          %td= sku_form.number_field :price, class: 'form-control'
+          %td= sku_form.number_field :stock, class: 'form-control'
+          - if sku_form.object.persisted?
+            %td
+              = sku_form.check_box :_destroy
+  .form-group
+    = form.label :status, '状態'
+    %br/
+    = form.select :status, [['公開', 'published'], ['非公開', 'hidden']], {}, class: 'form-control'
+  = form.submit(product.persisted? ? '更新する' : '登録する', class: 'btn btn-primary')

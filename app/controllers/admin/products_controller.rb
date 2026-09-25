@@ -30,6 +30,7 @@ class Admin::ProductsController < ApplicationController
       redirect_to [:admin, @product], notice: t('flash.admin.products.create.notice')
     else
       flash.now[:alert] = t('flash.admin.products.create.alert')
+      @product.skus.build if @product.skus.empty?
       render :new
     end
   end

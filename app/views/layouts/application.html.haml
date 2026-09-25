@@ -1,0 +1,50 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title SsRailsPractice
+    = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+  %body
+    .site-shell
+      %header.site-header
+        .site-header__inner
+          = link_to 'HOME', root_path, class: 'site-logo'
+          %nav.site-nav
+            = link_to '商品一覧', products_path
+            .site-nav__item
+              %span.site-nav__parent 管理
+              %ul.site-nav__sub
+                %li= link_to '商品管理', admin_products_path
+                %li= link_to '受注管理', admin_orders_path
+            = link_to cart_path do
+              カート
+              %span.badge= current_cart&.cart_items&.sum(:quantity).to_i
+            - if unpaid_order
+              = link_to "お支払い", payment_order_path(unpaid_order)
+            - if user_signed_in?
+              = link_to '注文履歴', orders_path
+              = link_to '会員情報', edit_user_registration_path
+              = link_to 'ログアウト', destroy_user_session_path, method: :delete
+            - else
+              = link_to 'ログイン', new_user_session_path
+      %main.site-main
+        .container-fluid
+          - if notice
+            .alert.alert-success{role: 'alert'}= notice
+          - if alert
+            .alert.alert-danger{role: 'alert'}= alert
+          = yield
+    #confirmModal.modal.fade{tabindex: '-1', role: 'dialog'}
+      .modal-dialog{role: 'document'}
+        .modal-content
+          .modal-header
+            %button.close{type: 'button', 'data-dismiss': 'modal', 'aria-label': '閉じる'}
+              %span{'aria-hidden': 'true'} &times;
+            %h4.modal-title 確認
+          .modal-body
+          .modal-footer
+            %button.btn.btn-default{type: 'button', 'data-dismiss': 'modal'} キャンセル
+            %button.btn.btn-danger{type: 'button', 'data-confirm-accept': true} OK

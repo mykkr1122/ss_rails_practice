@@ -2,35 +2,36 @@
 
 - [:customer_name, :customer_email].each do |attr|
   - @order.errors.full_messages_for(attr).each do |message|
-    %p= message
+    .alert.alert-danger= message
 
-%ul
+%ul.list-unstyled
   - @cart_items.each do |item|
-    %li
-      %p= item.product.name
-      %p= "SKU: #{item.sku.code}"
-      %p= "#{item.sku.price}円 ✕  #{item.quantity}個"
-      %p= "小計: #{item.sku.price * item.quantity}円"
+    %li.panel.panel-default
+      .panel-body
+        %p= item.product.name
+        %p= "SKU: #{item.sku.code}"
+        %p= "#{item.sku.price}円 ✕  #{item.quantity}個"
+        %p= "小計: #{item.sku.price * item.quantity}円"
 - if @order.errors[:base].any?
-  %ul
-    - @order.errors.full_messages_for(:base).each do |message|
-      %li= message
+  - @order.errors.full_messages_for(:base).each do |message|
+    .alert.alert-danger= message
 
-%p= "合計: #{@cart_items.sum{ |i| i.sku.price * i.quantity}}円"
+%p
+  %strong= "合計: #{@cart_items.sum{ |i| i.sku.price * i.quantity}}円"
 
 - if user_signed_in?
-  %p= "お名前: #{@order.customer_name}"
+  %p= "氏名: #{@order.customer_name}"
   %p= "メールアドレス: #{@order.customer_email}"
   = form_with url: orders_path, method: :post, local: true do
-    %p= submit_tag '注文確定'
+    %p= submit_tag '注文確定', class: 'btn btn-primary'
 - else
   = form_with model: @order, local: true do |f|
-    %p
+    .form-group
       = f.label :customer_name
-      = f.text_field :customer_name
-    %p
+      = f.text_field :customer_name, class: 'form-control'
+    .form-group
       = f.label :customer_email
-      = f.email_field :customer_email
-    %p= f.submit '注文確定'
+      = f.email_field :customer_email, class: 'form-control'
+    = f.submit '注文確定', class: 'btn btn-primary'
 
-%p= link_to 'カートへ戻る', cart_path
+%p= link_to 'カートへ戻る', cart_path, class: 'btn btn-default'

@@ -1,25 +1,27 @@
 %h1 カート
 
 - if @cart_items.blank?
-  %p カートは空です
-  %p= link_to '商品一覧へ', products_path
+  .alert.alert-info カートは空です
+  %p= link_to '商品一覧へ', products_path, class: 'btn btn-primary'
 - else
-  %ul
+  %ul.list-unstyled
     - @cart_items.each do |item|
-      %li
-        %p= item.product.name
-        %p= "SKU: #{item.sku.code}"
-        %p= "#{item.sku.price}円 × #{item.quantity}"
-        %p= "小計: #{item.sku.price * item.quantity}円"
-        - if item.product&.published?
-          = form_with model: item, url: cart_item_path(item), method: :patch, local: true do |f|
-            = f.number_field :quantity, min: 1, max: item.sku.stock.to_i
-            = f.submit '更新'
-        - else
-          %p この商品は現在購入できません
-        = button_to '削除', cart_item_path(item), method: :delete, data: { confirm: '削除しますか？' }
-  %p= "合計: #{@cart_items.sum { |i| i.sku.price * i.quantity }}円"
+      %li.panel.panel-default
+        .panel-body
+          %p= item.product.name
+          %p= "SKU: #{item.sku.code}"
+          %p= "#{item.sku.price}円 × #{item.quantity}"
+          %p= "小計: #{item.sku.price * item.quantity}円"
+          - if item.product&.published?
+            = form_with model: item, url: cart_item_path(item), method: :patch, local: true, class: 'form-inline' do |f|
+              = f.number_field :quantity, min: 1, max: item.sku.stock.to_i, class: 'form-control'
+              = f.submit '更新', class: 'btn btn-default'
+          - else
+            .alert.alert-warning この商品は現在購入できません
+          = button_to '削除', cart_item_path(item), method: :delete, data: { confirm: '削除しますか？' }, class: 'btn btn-danger btn-sm'
+  %p
+    %strong= "合計: #{@cart_items.sum { |i| i.sku.price * i.quantity }}円"
   - if unpaid_order
-    %p= link_to '未支払いの注文へ', payment_order_path(unpaid_order)
+    %p= link_to '未支払いの注文へ', payment_order_path(unpaid_order), class: 'btn btn-primary'
   - else
-    %p= link_to '注文へ進む', new_order_path
+    %p= link_to '注文へ進む', new_order_path, class: 'btn btn-primary'
