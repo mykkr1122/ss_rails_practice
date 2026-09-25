@@ -28,6 +28,6 @@
   %span.label.label-info= t("enums.order.status.#{@order.status}")
 
 - if @order.status_new?
-  %p= button_to '注文を完了にする', complete_admin_order_path(@order), method: :post, class: 'btn btn-primary'
+  %p= button_to '注文を完了にする', admin_order_completion_path(@order), method: :post, class: 'btn btn-primary'
 
 %p= link_to '注文一覧へ', admin_orders_path, class: 'btn btn-default'

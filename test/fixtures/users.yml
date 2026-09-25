@@ -1,0 +1,11 @@
+one:
+  name: 山田太郎
+  email: yamada@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
+  jti: <%= SecureRandom.uuid %>
+
+two:
+  name: 佐藤花子
+  email: satou@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
+  jti: <%= SecureRandom.uuid %>

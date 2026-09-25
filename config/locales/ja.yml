@@ -6,6 +6,13 @@ ja:
       last_word_connector: "、"
   errors:
     format: "%{attribute} %{message}"
+  api:
+    errors:
+      unauthorized: 認証が必要です
+      invalid_credentials: メールアドレスまたはパスワードが間違っています
+      not_found: 対象が見つかりませんでした
+      already_paid: この注文は既に支払いが完了しています
+      already_completed: この注文は既に完了しています
   flash:
     products:
       not_found: 商品が見つかりませんでした

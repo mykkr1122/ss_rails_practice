@@ -16,6 +16,7 @@ gem 'haml-rails', '~> 2.0'
 
 gem 'ransack', '~> 2.5'
 gem 'devise', '~> 4.8'
+gem 'devise-jwt', '~> 0.11'
 
 # Use mysql as the database for Active Record
 gem 'mysql2', '>= 0.4.4'

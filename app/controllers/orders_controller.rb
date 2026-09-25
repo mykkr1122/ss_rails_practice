@@ -1,16 +1,20 @@
 class OrdersController < ApplicationController
-  rescue_from ActiveRecord::RecordNotFound, with: :redirect_order_not_found
+  include OrderOwnership
 
   before_action :authenticate_user!, only: [:index]
-  before_action :require_own_order, only: [:show, :payment, :pay]
+  before_action :require_own_order, only: [:show]
   before_action :redirect_if_unpaid_order, only: [:new, :create]
 
+  # GET /orders
+  # ログインユーザー自身の注文一覧を表示する。
   def index
     @orders = current_user.orders
                           .includes(order_items: { sku: :product })
                           .order(created_at: :desc)
   end
 
+  # GET /orders/new
+  # カートの中身をもとに注文確認画面を表示する。
   def new
     if current_cart.blank? || current_cart.cart_items.empty?
       redirect_to cart_path, alert: t("flash.orders.empty_cart")
@@ -25,13 +29,15 @@ class OrdersController < ApplicationController
     @cart_items = current_cart.cart_items.includes(sku: :product)
   end
 
+  # POST /orders
+  # カートから注文を作成し、支払い画面へ遷移する。
   def create
     name, email, user = checkout_customer
     @order = Order.create_from_cart(current_cart, name, email, user: user)
 
     if @order.errors.empty?
       session[:order_id] = @order.id
-      redirect_to payment_order_path(@order),
+      redirect_to order_payment_path(@order),
                   notice: t("flash.orders.create.notice")
     elsif current_cart.blank? || current_cart.cart_items.empty?
       redirect_to cart_path, alert: @order.errors.full_messages.to_sentence.presence || t("flash.orders.empty_cart")
@@ -42,22 +48,10 @@ class OrdersController < ApplicationController
     end
   end
 
+  # GET /orders/:id
+  # 注文詳細を表示する。未決済の場合は支払い画面へリダイレクトする。
   def show
-    redirect_to payment_order_path(@order) if @order.status_new?
-  end
-
-  def payment
-    redirect_to order_path(@order) if @order.status_complete?
-  end
-
-  def pay
-    if @order.status_complete?
-      redirect_to order_path(@order), notice: t("flash.orders.pay.already")
-      return
-    end
-
-    @order.status_complete!
-    redirect_to order_path(@order), notice: t("flash.orders.pay.notice")
+    redirect_to order_payment_path(@order) if @order.status_new?
   end
 
   private
@@ -77,29 +71,11 @@ class OrdersController < ApplicationController
   def redirect_if_unpaid_order
     return if unpaid_order.blank?
 
-    redirect_to payment_order_path(unpaid_order), alert: t('flash.orders.unpaid_exists')
+    redirect_to order_payment_path(unpaid_order), alert: t('flash.orders.unpaid_exists')
   end
 
   def require_own_order
     @order = Order.includes(order_items: { sku: :product }).find(params[:id])
     raise ActiveRecord::RecordNotFound unless own_order?(@order)
-  end
-
-  def own_order?(order)
-    if user_signed_in? && order.user_id == current_user.id
-      true
-    elsif session[:order_id].to_i == order.id && order.user_id.blank?
-      true
-    else
-      false
-    end
-  end
-
-  def redirect_order_not_found
-    if user_signed_in?
-      redirect_to orders_path, alert: t("flash.orders.not_found")
-    else
-      redirect_to cart_path, alert: t("flash.orders.not_found")
-    end
   end
 end
