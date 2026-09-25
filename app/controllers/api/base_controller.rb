@@ -1,5 +1,6 @@
 class Api::BaseController < ActionController::API
   include Devise::Controllers::Helpers
+  include AbstractController::Translation
 
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
