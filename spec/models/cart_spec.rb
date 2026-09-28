@@ -65,4 +65,15 @@ RSpec.describe Cart, type: :model do
       expect(Cart.exists?(guest_cart.id)).to be false
     end
   end
+
+  describe "#subtotal, #tax, #total_price" do
+    it "小計・消費税(10%, 切り捨て)・合計を正しく計算する" do
+      cart = carts(:one) # 既にskus(:one)のcart_item(quantity: 1)を持つ
+      skus(:one).update!(price: 105)
+
+      expect(cart.subtotal).to eq(105)
+      expect(cart.tax).to eq(10) # 105 * 10 / 100 = 10.5 -> 切り捨てで10
+      expect(cart.total_price).to eq(115)
+    end
+  end
 end

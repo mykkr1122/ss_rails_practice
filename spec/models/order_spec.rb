@@ -46,4 +46,23 @@ RSpec.describe Order, type: :model do
       expect(order.errors[:base]).to include(I18n.t("activerecord.errors.models.order.sold_out"))
     end
   end
+
+  describe "#subtotal, #tax, #total_price" do
+    it "小計・消費税(10%, 切り捨て)・合計を正しく計算する" do
+      order = Order.create!(customer_name: "山田太郎", customer_email: "yamada@example.com")
+      order.order_items.create!(sku: skus(:one), quantity: 1, price: 105)
+
+      expect(order.subtotal).to eq(105)
+      expect(order.tax).to eq(10) # 105 * 10 / 100 = 10.5 -> 切り捨てで10
+      expect(order.total_price).to eq(115)
+    end
+  end
+
+  describe "#tax_rate" do
+    it "作成時に現在の税率が自動でセットされる" do
+      order = Order.create!(customer_name: "山田太郎", customer_email: "yamada@example.com")
+
+      expect(order.tax_rate).to eq(TaxRate::PERCENT)
+    end
+  end
 end

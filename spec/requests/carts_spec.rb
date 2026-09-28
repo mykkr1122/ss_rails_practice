@@ -20,5 +20,19 @@ RSpec.describe "Carts", type: :request do
       expect(response).to have_http_status(:success)
       expect(response.body).to include(products(:one).name)
     end
+
+    it "小計・消費税・合計金額が表示される" do
+      skus(:one).update!(price: 105)
+      post cart_items_path, params: {
+        product_id: products(:one).id,
+        cart_item: { sku_id: skus(:one).id, quantity: 1 }
+      }
+
+      get cart_path
+
+      expect(response.body).to include("小計: 105円")
+      expect(response.body).to include("消費税: 10円")
+      expect(response.body).to include("合計: 115円")
+    end
   end
 end

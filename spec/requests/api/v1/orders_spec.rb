@@ -28,5 +28,19 @@ RSpec.describe "Api::V1::Orders", type: :request do
 
       expect(response).to have_http_status(:created)
     end
+
+    it "レスポンスに小計・消費税・合計・税率が含まれる" do
+      skus(:one).update!(price: 105)
+
+      post "/api/v1/orders",
+           params: { order: { customer_name: users(:one).name, customer_email: users(:one).email } },
+           headers: auth_headers_for(users(:one)), as: :json
+
+      body = JSON.parse(response.body)
+      expect(body["subtotal"]).to eq(105)
+      expect(body["tax"]).to eq(10)
+      expect(body["total_price"]).to eq(115)
+      expect(body["tax_rate"]).to eq(TaxRate::PERCENT)
+    end
   end
 end
