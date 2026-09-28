@@ -1,15 +1,18 @@
 # ss_rails_practice
 
 
-## いま入っている技術スタック
+## 技術スタック
 | 項目 | 内容 |
 |---|---|
 | Ruby | 2.7.8（`.ruby-version` / rbenv） |
 | Rails | 6.0.6.1 |
 | アプリサーバ | Puma 4.3 |
 | DB | MySQL 5.7（Docker のみ。文字コード `utf8mb4`） |
-| テンプレート | 既存画面は ERB。カート以降の新規ビューは Haml（`haml-rails` / Haml 6） ※後工程で修正予定|
-| JavaScript | Sprockets + `rails-ujs` + Turbolinks |
+| テンプレート | Haml（`haml-rails`）。メーラーのデフォルトテンプレートのみ ERB |
+| JavaScript | Sprockets + `rails-ujs` + Turbolinks + CoffeeScript |
+| 認証 | Devise（HTML画面はセッション） + `devise-jwt`（`/api/v1`はJWTトークン認証） |
+| 検索 | Ransack |
+| テスト | RSpec（`rspec-rails`）+ Capybara / Selenium（system spec） |
 
 `concurrent-ruby` は `1.3.4` に固定している。1.3.5 以降は Rails 6.0 で `Logger` 関連のエラーになる。
 
@@ -72,3 +75,13 @@ bundle exec rails server
 ```bash
 bundle exec rails server -p 3001
 ```
+
+マイグレーション実行後、既にサーバーを起動していた場合は再起動が必要（DBスキーマの変更は起動中のプロセスには反映されないため）。
+
+## テスト
+
+```bash
+bundle exec rspec spec/
+```
+
+system spec（`spec/system/`）はヘッドレスChromeを使うため、初回は`selenium-webdriver`/`webdrivers`によるドライバのダウンロードが走る。
