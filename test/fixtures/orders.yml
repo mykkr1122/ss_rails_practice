@@ -5,9 +5,11 @@ one:
   customer_email: taro@example.com
   status: new
   user: one
+  tax_rate: 10
 
 two:
   customer_name: 佐藤花子
   customer_email: hanako@example.com
   status: complete
   user: two
+  tax_rate: 10

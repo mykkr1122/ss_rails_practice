@@ -1,4 +1,6 @@
 class Cart < ApplicationRecord
+  include TaxRate
+
   belongs_to :user, optional: true
   has_many :cart_items, dependent: :destroy
 
@@ -51,5 +53,17 @@ class Cart < ApplicationRecord
     end
 
     item
+  end
+
+  def subtotal
+    cart_items.sum { |item| item.sku.price * item.quantity }
+  end
+
+  def tax
+    subtotal * TaxRate::PERCENT / 100
+  end
+
+  def total_price
+    subtotal + tax
   end
 end

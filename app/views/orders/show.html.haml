@@ -22,7 +22,9 @@
         %td= "#{item.price * item.quantity}円"
 
 %p= "注文日時: #{@order.created_at.strftime('%Y-%m-%d %H:%M:%S')}"
-%p= "合計金額: #{@order.total_price }円"
+%p= "小計: #{@order.subtotal}円"
+%p= "消費税: #{@order.tax}円"
+%p= "合計金額: #{@order.total_price}円"
 %p
   決済状況:
   %span.label.label-info= t("enums.order.status.#{@order.status}")

@@ -6,7 +6,7 @@ class Api::V1::Admin::Orders::CompletionsController < Api::V1::BaseController
   # 管理者が注文を完了状態にする。
   def create
     @order.status_complete!
-    render json: @order
+    render json: @order, methods: [:subtotal, :tax, :total_price]
   end
 
   private
