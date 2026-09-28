@@ -1,4 +1,5 @@
 class Order < ApplicationRecord
+  include TaxRate
 
   # 注文ステータス
   # new: 新規注文
@@ -8,6 +9,8 @@ class Order < ApplicationRecord
     complete: 1
   },
   _prefix: :status
+
+  before_create :set_tax_rate
 
   belongs_to :user, optional: true
   has_many :order_items, dependent: :destroy
@@ -65,7 +68,21 @@ class Order < ApplicationRecord
     order
   end
 
-  def total_price
+  def subtotal
     order_items.sum(&:sub_total)
+  end
+
+  def tax
+    subtotal * tax_rate / 100
+  end
+
+  def total_price
+    subtotal + tax
+  end
+
+  private
+
+  def set_tax_rate
+    self.tax_rate ||= TaxRate::PERCENT
   end
 end

@@ -4,7 +4,7 @@ class Api::V1::Orders::PaymentsController < Api::V1::BaseController
   # GET /api/v1/orders/:order_id/payment
   # 自分の注文の支払い状況を返す。
   def show
-    render json: @order
+    render json: @order, methods: [:subtotal, :tax, :total_price]
   end
 
   # POST /api/v1/orders/:order_id/payment
@@ -15,7 +15,7 @@ class Api::V1::Orders::PaymentsController < Api::V1::BaseController
       return
     end
     @order.status_complete!
-    render json: @order
+    render json: @order, methods: [:subtotal, :tax, :total_price]
   end
 
   private

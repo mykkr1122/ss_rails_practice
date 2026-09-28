@@ -2,6 +2,8 @@
 %p= "注文番号: #{@order.id}"
 %p= "氏名: #{@order.customer_name}"
 %p= "メールアドレス: #{@order.customer_email}"
+%p= "小計: #{@order.subtotal}円"
+%p= "消費税: #{@order.tax}円"
 %p= "合計金額: #{@order.total_price}円"
 %p
   決済状況:

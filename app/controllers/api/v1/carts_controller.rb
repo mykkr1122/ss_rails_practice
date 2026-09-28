@@ -3,6 +3,7 @@ class Api::V1::CartsController < Api::V1::BaseController
   # ログインユーザー自身のカートの中身を返す。
   def show
     render json: current_cart_for_api,
+           methods: [:subtotal, :tax, :total_price],
            include: { cart_items: { include: { sku: { include: :product } } } }
   end
 end

@@ -19,8 +19,10 @@
           - else
             .alert.alert-warning この商品は現在購入できません
           = button_to '削除', cart_item_path(item), method: :delete, data: { confirm: '削除しますか？' }, class: 'btn btn-danger btn-sm'
+  %p= "小計: #{current_cart.subtotal}円"
+  %p= "消費税: #{current_cart.tax}円"
   %p
-    %strong= "合計: #{@cart_items.sum { |i| i.sku.price * i.quantity }}円"
+    %strong= "合計: #{current_cart.total_price}円"
   - if unpaid_order
     %p= link_to '未支払いの注文へ', order_payment_path(unpaid_order), class: 'btn btn-primary'
   - else

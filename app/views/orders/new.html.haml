@@ -16,8 +16,10 @@
   - @order.errors.full_messages_for(:base).each do |message|
     .alert.alert-danger= message
 
+%p= "小計: #{current_cart.subtotal}円"
+%p= "消費税: #{current_cart.tax}円"
 %p
-  %strong= "合計: #{@cart_items.sum{ |i| i.sku.price * i.quantity}}円"
+  %strong= "合計: #{current_cart.total_price}円"
 
 - if user_signed_in?
   %p= "氏名: #{@order.customer_name}"
