@@ -18,8 +18,6 @@
     - @products.each do |product|
       %li.product-card.panel.panel-default
         = link_to product.name, admin_product_path(product), class: 'product-card__name'
-        %p.product-card__price
-          = product.display_price
-          円〜
+        %p.product-card__price= "#{yen(product.display_price)}〜"
         %p
           = link_to '編集', edit_admin_product_path(product), class: 'btn btn-default btn-sm'

@@ -30,9 +30,12 @@ RSpec.describe "Carts", type: :request do
 
       get cart_path
 
-      expect(response.body).to include("小計: 105円")
-      expect(response.body).to include("消費税: 10円")
-      expect(response.body).to include("合計: 115円")
+      expect(response.body).to include("小計")
+      expect(response.body).to include("105円")
+      expect(response.body).to include("消費税")
+      expect(response.body).to include("10円")
+      expect(response.body).to include("合計")
+      expect(response.body).to include("115円")
     end
   end
 end

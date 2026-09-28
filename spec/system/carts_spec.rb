@@ -7,7 +7,7 @@ RSpec.describe "Carts", type: :system do
     product.save!
 
     visit product_path(product)
-    select sku.code_with_price, from: 'SKU'
+    select "#{sku.code} (#{ActionController::Base.helpers.number_with_delimiter(sku.price)}円)", from: 'SKU'
     click_button 'カートに追加'
 
     product
