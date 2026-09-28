@@ -32,8 +32,7 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  # test/ 配下のMinitestテストと共有するため、移行が終わるまではtest/fixturesを参照する
-  config.fixture_path = "#{::Rails.root}/test/fixtures"
+  config.fixture_path = "#{::Rails.root}/spec/fixtures"
   config.global_fixtures = :all
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
