@@ -1,0 +1,33 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one_shipping:
+  order: one
+  address_type: Shipping
+  postal_code: "1000001"
+  prefecture: 東京都
+  city: 千代田区
+  address_line: 1-1-1
+
+one_billing:
+  order: one
+  address_type: Billing
+  postal_code: "1000001"
+  prefecture: 東京都
+  city: 千代田区
+  address_line: 1-1-1
+
+two_shipping:
+  order: two
+  address_type: Shipping
+  postal_code: "5300001"
+  prefecture: 大阪府
+  city: 大阪市
+  address_line: 2-2-2
+
+two_billing:
+  order: two
+  address_type: Billing
+  postal_code: "5300001"
+  prefecture: 大阪府
+  city: 大阪市
+  address_line: 2-2-2

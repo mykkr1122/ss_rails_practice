@@ -28,6 +28,6 @@ class Admin::OrdersController < ApplicationController
   end
 
   def set_order
-    @order = Order.includes(order_items: { sku: :product}).find(params[:id])
+    @order = Order.includes(order_items: { sku: :product }, shipping_address: [], billing_address: []).find(params[:id])
   end
 end

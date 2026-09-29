@@ -32,7 +32,18 @@
   .price-row
     %strong 合計金額
     %strong= yen(@order.total_price)
-%p
+
+- if @order.shipping_address
+  %h4.address-heading お届け先住所
+  %p= "〒#{@order.shipping_address.postal_code}"
+  %p= "#{@order.shipping_address.prefecture}#{@order.shipping_address.city}#{@order.shipping_address.address_line}"
+
+- if @order.billing_address
+  %h4.address-heading 請求先住所
+  %p= "〒#{@order.billing_address.postal_code}"
+  %p= "#{@order.billing_address.prefecture}#{@order.billing_address.city}#{@order.billing_address.address_line}"
+
+%p.payment-status
   決済状況:
   %span.label.label-info= t("enums.order.status.#{@order.status}")
 

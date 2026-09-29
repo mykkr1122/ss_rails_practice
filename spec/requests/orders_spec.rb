@@ -41,11 +41,21 @@ RSpec.describe "Orders", type: :request do
   end
 
   describe "POST /orders" do
+    def address_attributes
+      { postal_code: "1000001", prefecture: "東京都", city: "千代田区", address_line: "1-1-1" }
+    end
+
     it "ゲストでもカートから注文を作成し、支払い画面へ遷移する" do
       add_item_to_cart
 
       expect {
-        post orders_path, params: { order: { customer_name: "山田太郎", customer_email: "yamada@example.com" } }
+        post orders_path, params: {
+          order: {
+            customer_name: "山田太郎", customer_email: "yamada@example.com",
+            shipping_address_attributes: address_attributes,
+            billing_address_attributes: address_attributes
+          }
+        }
       }.to change(Order, :count).by(1)
 
       expect(response).to redirect_to(order_payment_path(Order.last))

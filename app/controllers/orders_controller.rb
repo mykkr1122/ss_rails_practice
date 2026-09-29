@@ -22,6 +22,8 @@ class OrdersController < ApplicationController
     end
 
     @order = Order.new
+    @order.build_shipping_address
+    @order.build_billing_address
     if user_signed_in?
       @order.customer_name = current_user.name
       @order.customer_email = current_user.email
@@ -33,7 +35,10 @@ class OrdersController < ApplicationController
   # カートから注文を作成し、支払い画面へ遷移する。
   def create
     name, email, user = checkout_customer
-    @order = Order.create_from_cart(current_cart, name, email, user: user)
+    @order = Order.create_from_cart(
+      current_cart, name, email, user: user,
+      address_attributes: order_params.slice(:shipping_address_attributes, :billing_address_attributes)
+    )
 
     if @order.errors.empty?
       session[:order_id] = @order.id
@@ -57,7 +62,11 @@ class OrdersController < ApplicationController
   private
 
   def order_params
-    params.require(:order).permit(:customer_name, :customer_email)
+    params.require(:order).permit(
+      :customer_name, :customer_email,
+      shipping_address_attributes: [:postal_code, :prefecture, :city, :address_line],
+      billing_address_attributes: [:postal_code, :prefecture, :city, :address_line]
+    )
   end
 
   def checkout_customer
@@ -75,7 +84,8 @@ class OrdersController < ApplicationController
   end
 
   def require_own_order
-    @order = Order.includes(order_items: { sku: :product }).find(params[:id])
+    @order = Order.includes(order_items: { sku: :product }, shipping_address: [], billing_address: [])
+                  .find(params[:id])
     raise ActiveRecord::RecordNotFound unless own_order?(@order)
   end
 end

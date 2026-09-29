@@ -16,7 +16,10 @@ class Api::V1::OrdersController < Api::V1::BaseController
   # POST /api/v1/orders
   # カートから注文を作成する。
   def create
-    order = Order.create_from_cart(current_cart_for_api, order_params[:customer_name], order_params[:customer_email], user: current_user)
+    order = Order.create_from_cart(
+      current_cart_for_api, order_params[:customer_name], order_params[:customer_email],
+      user: current_user, address_attributes: order_params.slice(:shipping_address_attributes, :billing_address_attributes)
+    )
     if order.errors.empty?
       render json: order, methods: [:subtotal, :tax, :total_price], status: :created
     else
@@ -27,6 +30,10 @@ class Api::V1::OrdersController < Api::V1::BaseController
   private
 
   def order_params
-    params.require(:order).permit(:customer_name, :customer_email)
+    params.require(:order).permit(
+      :customer_name, :customer_email,
+      shipping_address_attributes: [:postal_code, :prefecture, :city, :address_line],
+      billing_address_attributes: [:postal_code, :prefecture, :city, :address_line]
+    )
   end
 end

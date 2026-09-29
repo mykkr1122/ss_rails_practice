@@ -6,7 +6,14 @@ RSpec.describe "Orders::Payments", type: :request do
       product_id: products(:one).id,
       cart_item: { sku_id: skus(:one).id, quantity: 1 }
     }
-    post orders_path, params: { order: { customer_name: "山田太郎", customer_email: "yamada@example.com" } }
+    address_attributes = { postal_code: "1000001", prefecture: "東京都", city: "千代田区", address_line: "1-1-1" }
+    post orders_path, params: {
+      order: {
+        customer_name: "山田太郎", customer_email: "yamada@example.com",
+        shipping_address_attributes: address_attributes,
+        billing_address_attributes: address_attributes
+      }
+    }
     Order.last
   end
 
