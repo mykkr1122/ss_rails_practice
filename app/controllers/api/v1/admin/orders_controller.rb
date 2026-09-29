@@ -3,15 +3,18 @@ class Api::V1::Admin::OrdersController < Api::V1::BaseController
   # 受注一覧を返す。ransackによる検索に対応。
   def index
     q = Order.ransack(search_params)
-    orders = q.result(distinct: true).includes(order_items: { sku: :product }).order(created_at: :desc)
-    render json: orders, methods: [:subtotal, :tax, :total_price]
+    orders = q.result(distinct: true)
+              .includes(order_items: { sku: :product }, shipping_address: [], billing_address: [])
+              .order(created_at: :desc)
+    render json: orders, methods: [:subtotal, :tax, :total_price], include: [:shipping_address, :billing_address]
   end
 
   # GET /api/v1/admin/orders/:id
   # 受注詳細を返す。
   def show
-    order = Order.includes(order_items: { sku: :product }).find(params[:id])
-    render json: order, methods: [:subtotal, :tax, :total_price]
+    order = Order.includes(order_items: { sku: :product }, shipping_address: [], billing_address: [])
+                 .find(params[:id])
+    render json: order, methods: [:subtotal, :tax, :total_price], include: [:shipping_address, :billing_address]
   end
 
   private

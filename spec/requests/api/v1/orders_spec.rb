@@ -25,6 +25,14 @@ RSpec.describe "Api::V1::Orders", type: :request do
 
       expect(response).to have_http_status(:not_found)
     end
+
+    it "レスポンスにお届け先住所・請求先住所が含まれる" do
+      get "/api/v1/orders/#{orders(:one).id}", headers: auth_headers_for(users(:one))
+
+      body = JSON.parse(response.body)
+      expect(body["shipping_address"]["postal_code"]).to eq(orders(:one).shipping_address.postal_code)
+      expect(body["billing_address"]["postal_code"]).to eq(orders(:one).billing_address.postal_code)
+    end
   end
 
   describe "POST /api/v1/orders" do
@@ -34,6 +42,9 @@ RSpec.describe "Api::V1::Orders", type: :request do
            headers: auth_headers_for(users(:one)), as: :json
 
       expect(response).to have_http_status(:created)
+      body = JSON.parse(response.body)
+      expect(body["shipping_address"]["postal_code"]).to eq("1000001")
+      expect(body["billing_address"]["postal_code"]).to eq("1000001")
     end
 
     it "住所が無い場合はエラーになる" do

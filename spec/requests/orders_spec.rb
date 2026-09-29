@@ -60,6 +60,17 @@ RSpec.describe "Orders", type: :request do
 
       expect(response).to redirect_to(order_payment_path(Order.last))
     end
+
+    it "住所が無い場合は注文が作成されずエラーメッセージが表示される" do
+      add_item_to_cart
+
+      expect {
+        post orders_path, params: { order: { customer_name: "山田太郎", customer_email: "yamada@example.com" } }
+      }.not_to change(Order, :count)
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include(I18n.t("flash.orders.create.alert"))
+    end
   end
 
   describe "GET /orders/:id" do
