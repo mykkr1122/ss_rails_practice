@@ -10,7 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_09_28_000753) do
+ActiveRecord::Schema.define(version: 2026_09_28_054536) do
+
+  create_table "addresses", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.string "address_type", null: false
+    t.string "postal_code", null: false
+    t.string "prefecture", null: false
+    t.string "city", null: false
+    t.string "address_line", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["order_id", "address_type"], name: "index_addresses_on_order_id_and_address_type", unique: true
+    t.index ["order_id"], name: "index_addresses_on_order_id"
+  end
 
   create_table "cart_items", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "cart_id", null: false
@@ -93,6 +106,7 @@ ActiveRecord::Schema.define(version: 2026_09_28_000753) do
     t.index ["jti"], name: "index_users_on_jti", unique: true
   end
 
+  add_foreign_key "addresses", "orders"
   add_foreign_key "cart_items", "carts"
   add_foreign_key "cart_items", "skus"
   add_foreign_key "carts", "users"

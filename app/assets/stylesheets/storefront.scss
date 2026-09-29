@@ -137,6 +137,16 @@ body {
   margin-top: 16px;
 }
 
+// お届け先住所・請求先住所の見出しは、直前の項目との間隔を広めに取る。
+.address-heading {
+  margin-top: 24px;
+}
+
+// 決済状況は住所ブロックとの間隔を広めに取る。
+.payment-status {
+  margin-top: 24px;
+}
+
 .button_to {
   display: inline-block;
   margin: 0;

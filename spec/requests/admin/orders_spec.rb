@@ -14,6 +14,8 @@ RSpec.describe "Admin::Orders", type: :request do
       get admin_order_path(orders(:one))
 
       expect(response).to have_http_status(:success)
+      expect(response.body).to include("お届け先住所")
+      expect(response.body).to include(orders(:one).shipping_address.postal_code)
     end
 
     it "存在しない注文は一覧へリダイレクトされる" do

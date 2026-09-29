@@ -14,13 +14,19 @@ class Order < ApplicationRecord
 
   belongs_to :user, optional: true
   has_many :order_items, dependent: :destroy
+  has_many :addresses, dependent: :destroy
+  has_one :shipping_address, -> { where(address_type: "Shipping") }, class_name: "Address", inverse_of: :order
+  has_one :billing_address, -> { where(address_type: "Billing") }, class_name: "Address", inverse_of: :order
+
+  accepts_nested_attributes_for :shipping_address, :billing_address
 
   validates :customer_name, presence: true
   # URI::MailTo::EMAIL_REGEXPでメールアドレスの形式をチェック
   validates :customer_email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :shipping_address, :billing_address, presence: true
 
-  def self.create_from_cart(cart, customer_name, customer_email, user: nil)
-    order = new(customer_name: customer_name, customer_email: customer_email, user: user)
+  def self.create_from_cart(cart, customer_name, customer_email, user: nil, address_attributes: {})
+    order = new(customer_name: customer_name, customer_email: customer_email, user: user, **address_attributes)
     items = cart&.cart_items.to_a
 
     if items.empty?

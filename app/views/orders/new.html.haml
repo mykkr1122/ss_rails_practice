@@ -16,6 +16,13 @@
   - @order.errors.full_messages_for(:base).each do |message|
     .alert.alert-danger= message
 
+- if @order.shipping_address
+  - @order.shipping_address.errors.full_messages.each do |message|
+    .alert.alert-danger= "お届け先住所: #{message}"
+- if @order.billing_address
+  - @order.billing_address.errors.full_messages.each do |message|
+    .alert.alert-danger= "請求先住所: #{message}"
+
 .price-summary
   .price-row
     %span 小計
@@ -27,21 +34,57 @@
     %strong 合計
     %strong= yen(current_cart.total_price)
 
-- if user_signed_in?
-  %p= "氏名: #{@order.customer_name}"
-  %p= "メールアドレス: #{@order.customer_email}"
-  = form_with url: orders_path, method: :post, local: true do
-    .order-submit
-      = submit_tag '注文確定', class: 'btn btn-primary'
-- else
-  = form_with model: @order, local: true do |f|
+= form_with model: @order, url: orders_path, local: true do |f|
+  - if user_signed_in?
+    .form-group
+      %label 氏名
+      %p.form-control-static= @order.customer_name
+    .form-group
+      %label メールアドレス
+      %p.form-control-static= @order.customer_email
+  - else
     .form-group
       = f.label :customer_name
       = f.text_field :customer_name, class: 'form-control'
     .form-group
       = f.label :customer_email
       = f.email_field :customer_email, class: 'form-control'
-    .order-submit
-      = f.submit '注文確定', class: 'btn btn-primary'
+
+  %h4.address-heading お届け先住所
+  = f.fields_for :shipping_address do |sf|
+    .form-group
+      = sf.label :postal_code, '郵便番号（ハイフンなし）'
+      = sf.text_field :postal_code, class: 'form-control js-shipping-field', placeholder: '1234567', maxlength: 7, inputmode: 'numeric', data: {field: 'postal_code'}
+    .form-group
+      = sf.label :prefecture, '都道府県'
+      = sf.text_field :prefecture, class: 'form-control js-shipping-field', data: {field: 'prefecture'}
+    .form-group
+      = sf.label :city, '市区町村'
+      = sf.text_field :city, class: 'form-control js-shipping-field', data: {field: 'city'}
+    .form-group
+      = sf.label :address_line, '番地・建物名'
+      = sf.text_field :address_line, class: 'form-control js-shipping-field', data: {field: 'address_line'}
+
+  %h4.address-heading 請求先住所
+  .checkbox
+    %label
+      = check_box_tag 'same_as_shipping', '1', params[:same_as_shipping].present?, class: 'js-same-as-shipping'
+      お届け先住所と同じ
+  = f.fields_for :billing_address do |bf|
+    .form-group
+      = bf.label :postal_code, '郵便番号（ハイフンなし）'
+      = bf.text_field :postal_code, class: 'form-control js-billing-field', placeholder: '1234567', maxlength: 7, inputmode: 'numeric', data: {field: 'postal_code'}
+    .form-group
+      = bf.label :prefecture, '都道府県'
+      = bf.text_field :prefecture, class: 'form-control js-billing-field', data: {field: 'prefecture'}
+    .form-group
+      = bf.label :city, '市区町村'
+      = bf.text_field :city, class: 'form-control js-billing-field', data: {field: 'city'}
+    .form-group
+      = bf.label :address_line, '番地・建物名'
+      = bf.text_field :address_line, class: 'form-control js-billing-field', data: {field: 'address_line'}
+
+  .order-submit
+    = f.submit '注文確定', class: 'btn btn-primary'
 
 %p= link_to 'カートへ戻る', cart_path, class: 'btn btn-default'

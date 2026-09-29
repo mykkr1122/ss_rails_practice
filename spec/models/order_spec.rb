@@ -1,12 +1,19 @@
 require "rails_helper"
 
 RSpec.describe Order, type: :model do
+  let(:address_attributes) do
+    {
+      shipping_address_attributes: { postal_code: "1000001", prefecture: "東京都", city: "千代田区", address_line: "1-1-1" },
+      billing_address_attributes: { postal_code: "1000001", prefecture: "東京都", city: "千代田区", address_line: "1-1-1" }
+    }
+  end
+
   describe ".create_from_cart" do
     it "カートの中身から注文を作成し、在庫を減らしてカートを空にする" do
       cart = carts(:one)
       sku = skus(:one)
 
-      order = Order.create_from_cart(cart, "山田太郎", "yamada@example.com")
+      order = Order.create_from_cart(cart, "山田太郎", "yamada@example.com", address_attributes: address_attributes)
 
       expect(order).to be_persisted
       expect(order.errors).to be_empty
@@ -49,7 +56,7 @@ RSpec.describe Order, type: :model do
 
   describe "#subtotal, #tax, #total_price" do
     it "小計・消費税(10%, 切り捨て)・合計を正しく計算する" do
-      order = Order.create!(customer_name: "山田太郎", customer_email: "yamada@example.com")
+      order = Order.create!(customer_name: "山田太郎", customer_email: "yamada@example.com", **address_attributes)
       order.order_items.create!(sku: skus(:one), quantity: 1, price: 105)
 
       expect(order.subtotal).to eq(105)
@@ -60,7 +67,7 @@ RSpec.describe Order, type: :model do
 
   describe "#tax_rate" do
     it "作成時に現在の税率が自動でセットされる" do
-      order = Order.create!(customer_name: "山田太郎", customer_email: "yamada@example.com")
+      order = Order.create!(customer_name: "山田太郎", customer_email: "yamada@example.com", **address_attributes)
 
       expect(order.tax_rate).to eq(TaxRate::PERCENT)
     end
