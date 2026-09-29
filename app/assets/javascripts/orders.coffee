@@ -17,3 +17,8 @@ $(document).on 'change', '.js-same-as-shipping', ->
 $(document).on 'input', '.js-shipping-field', ->
   if $('.js-same-as-shipping').is(':checked')
     copyShippingToBilling()
+
+$(document).on 'turbolinks:load', ->
+  if $('.js-same-as-shipping').is(':checked')
+    copyShippingToBilling()
+    $('.js-billing-field').prop('readonly', true)
