@@ -127,6 +127,16 @@ body {
   margin: 0 0 10px;
 }
 
+.product-detail__actions-row + .product-detail__actions-row {
+  margin-top: 16px;
+}
+
+// 注文確定・決済・注文履歴へ戻る等、画面末尾の主要ボタンの上に余白を空ける。
+// form + p 等の既存ルールと同じ16pxに揃えている。
+.order-submit {
+  margin-top: 16px;
+}
+
 .button_to {
   display: inline-block;
   margin: 0;

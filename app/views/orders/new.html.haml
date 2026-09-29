@@ -10,22 +10,29 @@
       .panel-body
         %p= item.product.name
         %p= "SKU: #{item.sku.code}"
-        %p= "#{item.sku.price}円 ✕  #{item.quantity}個"
-        %p= "小計: #{item.sku.price * item.quantity}円"
+        %p= "#{yen(item.sku.price)} ✕  #{item.quantity}個"
+        %p= "小計: #{yen(item.sku.price * item.quantity)}"
 - if @order.errors[:base].any?
   - @order.errors.full_messages_for(:base).each do |message|
     .alert.alert-danger= message
 
-%p= "小計: #{current_cart.subtotal}円"
-%p= "消費税: #{current_cart.tax}円"
-%p
-  %strong= "合計: #{current_cart.total_price}円"
+.price-summary
+  .price-row
+    %span 小計
+    %span= yen(current_cart.subtotal)
+  .price-row
+    %span 消費税
+    %span= yen(current_cart.tax)
+  .price-row
+    %strong 合計
+    %strong= yen(current_cart.total_price)
 
 - if user_signed_in?
   %p= "氏名: #{@order.customer_name}"
   %p= "メールアドレス: #{@order.customer_email}"
   = form_with url: orders_path, method: :post, local: true do
-    %p= submit_tag '注文確定', class: 'btn btn-primary'
+    .order-submit
+      = submit_tag '注文確定', class: 'btn btn-primary'
 - else
   = form_with model: @order, local: true do |f|
     .form-group
@@ -34,6 +41,7 @@
     .form-group
       = f.label :customer_email
       = f.email_field :customer_email, class: 'form-control'
-    = f.submit '注文確定', class: 'btn btn-primary'
+    .order-submit
+      = f.submit '注文確定', class: 'btn btn-primary'
 
 %p= link_to 'カートへ戻る', cart_path, class: 'btn btn-default'

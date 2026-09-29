@@ -1,5 +1,6 @@
 %h1 注文完了
 
+%p= "注文日時: #{@order.created_at.strftime('%Y/%m/%d %H:%M')}"
 %p= "注文番号: #{@order.id}"
 %p= "氏名: #{@order.customer_name}"
 %p= "メールアドレス: #{@order.customer_email}"
@@ -17,18 +18,25 @@
       %tr
         %td= item.product.name
         %td= item.sku.code
-        %td= "#{item.price}円"
+        %td= yen(item.price)
         %td= item.quantity
-        %td= "#{item.price * item.quantity}円"
+        %td= yen(item.price * item.quantity)
 
-%p= "注文日時: #{@order.created_at.strftime('%Y-%m-%d %H:%M:%S')}"
-%p= "小計: #{@order.subtotal}円"
-%p= "消費税: #{@order.tax}円"
-%p= "合計金額: #{@order.total_price}円"
+.price-summary
+  .price-row
+    %span 小計
+    %span= yen(@order.subtotal)
+  .price-row
+    %span 消費税
+    %span= yen(@order.tax)
+  .price-row
+    %strong 合計金額
+    %strong= yen(@order.total_price)
 %p
   決済状況:
   %span.label.label-info= t("enums.order.status.#{@order.status}")
 
-- if user_signed_in?
-  %p= link_to '注文履歴へ', orders_path, class: 'btn btn-default'
-%p= link_to '商品一覧へ戻る', products_path, class: 'btn btn-default'
+.order-submit
+  - if user_signed_in?
+    %p= link_to '注文履歴へ', orders_path, class: 'btn btn-default'
+  %p= link_to '商品一覧へ', products_path, class: 'btn btn-default'

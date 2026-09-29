@@ -8,7 +8,7 @@
       = hidden_field_tag :product_id, @product.id
       .form-group
         = f.label :sku_id, 'SKU'
-        - sku_options = @product.skus.map { |s| [s.stock.to_i <= 0 ? "#{s.code_with_price}(売り切れ)" : s.code_with_price, s.id, { disabled: s.stock.to_i <= 0 }] }
+        - sku_options = @product.skus.map { |s| label = "#{s.code} (#{yen(s.price)})"; [s.stock.to_i <= 0 ? "#{label}(売り切れ)" : label, s.id, { disabled: s.stock.to_i <= 0 }] }
         = f.select :sku_id, options_for_select(sku_options), { include_blank: '選択してください' }, class: 'form-control'
       .form-group
         = f.label :quantity, '数量'

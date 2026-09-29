@@ -10,8 +10,8 @@
         .panel-body
           %p= item.product.name
           %p= "SKU: #{item.sku.code}"
-          %p= "#{item.sku.price}円 × #{item.quantity}"
-          %p= "小計: #{item.sku.price * item.quantity}円"
+          %p= "#{yen(item.sku.price)} × #{item.quantity}"
+          %p= "小計: #{yen(item.sku.price * item.quantity)}"
           - if item.product&.published?
             = form_with model: item, url: cart_item_path(item), method: :patch, local: true, class: 'form-inline' do |f|
               = f.number_field :quantity, min: 1, max: item.sku.stock.to_i, class: 'form-control'
@@ -19,10 +19,16 @@
           - else
             .alert.alert-warning この商品は現在購入できません
           = button_to '削除', cart_item_path(item), method: :delete, data: { confirm: '削除しますか？' }, class: 'btn btn-danger btn-sm'
-  %p= "小計: #{current_cart.subtotal}円"
-  %p= "消費税: #{current_cart.tax}円"
-  %p
-    %strong= "合計: #{current_cart.total_price}円"
+  .price-summary
+    .price-row
+      %span 小計
+      %span= yen(current_cart.subtotal)
+    .price-row
+      %span 消費税
+      %span= yen(current_cart.tax)
+    .price-row
+      %strong 合計
+      %strong= yen(current_cart.total_price)
   - if unpaid_order
     %p= link_to '未支払いの注文へ', order_payment_path(unpaid_order), class: 'btn btn-primary'
   - else

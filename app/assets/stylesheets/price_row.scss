@@ -1,0 +1,12 @@
+// 小計・消費税・合計金額のような「ラベル: 金額」の行を、
+// 金額の末尾位置が揃うように左右に分けて配置する。
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  max-width: 300px;
+}
+
+// price-rowのまとまりと、次の要素（ボタンや決済状況など）との間隔を空ける。
+.price-summary {
+  margin-bottom: 20px;
+}
